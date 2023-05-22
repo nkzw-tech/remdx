@@ -1,0 +1,33 @@
+{
+  "name": "@nkzw/remdx",
+  "description": "Beautiful Minimalist React & MDX Presentations",
+  "version": "0.0.1",
+  "author": "Christoph Nakazawa <christoph.pojer@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/cpojer/remdx.git"
+  },
+  "type": "module",
+  "main": "./index",
+  "devDependencies": {
+    "@mdx-js/react": "^2.2.1",
+    "@types/mousetrap": "^1.6.8",
+    "@types/react-dom": "^18.2.4",
+    "@types/react": "^18.2.6",
+    "@types/styled-components": "^5.1.15",
+    "history": "^5.3.0",
+    "mousetrap": "^1.6.5",
+    "react-dom": "^18.2.0",
+    "react-spring": "^9.5.5",
+    "react-swipeable": "^7.0.0",
+    "react": "^18.2.0",
+    "use-resize-observer": "^9.0.2"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "scripts": {
+    "build": "rm -f index.js; esbuild --format=esm --outfile=index.js --jsx=automatic --external:react --external:react-dom --bundle ./index.tsx"
+  }
+}

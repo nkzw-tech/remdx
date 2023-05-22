@@ -1,0 +1,51 @@
+import sights from './sights';
+
+export { Components } from './Components';
+export { Themes } from './Themes';
+
+--
+image: tokyo.jpg
+--
+
+# TOKYO
+
+---
+
+# Tokyo Sights
+
+<ul>
+  {sights.map((sight) => (
+    <li key={sight.name}>{sight.name}</li>
+  ))}
+</ul>
+
+---
+
+theme: dark
+notes: "Hey, this is a test."
+
+--
+
+# Tokyo in the Dark
+
+![Tokyo in the Dark](dark.jpg?height=60vh&borderRadius=20px&margin=0%20auto&display=block)
+
+---
+
+<Center>
+
+# Custom Components in the Center
+
+</Center>
+
+---
+
+# Code in Tokyo
+
+```javascript
+const tokyo = 'Tokyo';
+
+console.log('I love ' + tokyo);
+```
+
+_Hint: Switch your system's dark/light mode!_

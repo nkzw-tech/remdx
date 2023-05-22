@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "plugins": [
+      {
+        "lint": {
+          "unknownProperties": "error"
+        },
+        "name": "typescript-styled-plugin"
+      }
+    ],
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "es2020"
+  },
+  "exclude": ["dist/", "node_modules", "packages/create-remdx/template"],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "esnext",
+      "isolatedModules": false
+    },
+    "files": true,
+    "transpileOnly": true,
+    "transpiler": "ts-node/transpilers/swc"
+  }
+}

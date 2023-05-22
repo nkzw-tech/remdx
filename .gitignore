@@ -1,0 +1,8 @@
+.eslintcache
+.pnpm-debug.log
+**/node_modules/
+/dist/
+/node_modules/
+coverage
+tsconfig.tsbuildinfo
+vite.config.ts.timestamp-*

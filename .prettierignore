@@ -1,0 +1,5 @@
+coverage
+dist/
+packages/*/index.js
+pnpm-lock.yaml
+vite.config.ts.timestamp*
