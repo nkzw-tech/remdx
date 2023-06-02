@@ -162,7 +162,7 @@ export default function remdx(): Plugin {
           const {
             highlighters: [highlighter],
           } = await setupForFile(shikiOptions);
-          highlighter?.setColorReplacements(ColorReplacements);
+          highlighter?.setColorReplacements?.(ColorReplacements);
           initialized = true;
         }
 
