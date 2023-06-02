@@ -16,7 +16,7 @@ npm run dev
 
 ### Custom Setup
 
-See the [Example Deck](/cpojer/remdx/tree/main/examples/tokyo) to get started with adding ReMDX to your project:
+See the [Example Deck](examples/tokyo) to get started with adding ReMDX to your project:
 
 ```bash
 npm add @nkzw/remdx @nkzw/vite-plugin-remdx
