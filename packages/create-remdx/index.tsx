@@ -85,7 +85,7 @@ async function create() {
 
   const { yes } = await prompts({
     initial: 'Y',
-    message: 'Install and start it now?',
+    message: 'Install and start the dev server now?',
     name: 'yes',
     type: 'confirm',
   });

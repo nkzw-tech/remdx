@@ -5,7 +5,7 @@ Create beautiful minimalist presentations with React & MDX.
 ## Setup
 
 ```bash
-npm create remdx
+npm init remdx
 ```
 
 And:
