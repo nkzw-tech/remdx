@@ -1,9 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import useResizeObserver from 'use-resize-observer';
-
-type ResizeHandler = NonNullable<
-  NonNullable<Parameters<typeof useResizeObserver>[0]>['onResize']
->;
+import useResizeObserver, { ResizeHandler } from 'use-resize-observer';
 
 export default function useAspectRatioFitting(aspectRatio: number) {
   const targetWidth = 1366;
