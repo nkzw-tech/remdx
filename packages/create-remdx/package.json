@@ -1,7 +1,7 @@
 {
   "name": "create-remdx",
   "description": "Beautiful Minimalist React & MDX Presentations",
-  "version": "0.3.4",
+  "version": "0.4",
   "author": "Christoph Nakazawa <christoph.pojer@gmail.com>",
   "repository": {
     "type": "git",
