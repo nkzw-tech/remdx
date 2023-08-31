@@ -128,7 +128,6 @@ export default function Slide({
       pendingView.slideIndex === undefined ||
       pendingView.slideIndex > slideCount - 1
     ) {
-      setAnimate(false);
       cancelTransition();
     } else {
       setAnimate(navigationDirection > 0);
