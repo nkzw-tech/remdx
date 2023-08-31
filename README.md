@@ -73,9 +73,9 @@ The core of ReMDX is a lean fork of Spectacle. `create-remdx` is based on Slidev
 
 All three of the above solutions fall short in some way. Some are a bit outdated, and some have too much cruft or are slow. Slidev is modern but only works with Vue instead of React. I wanted to build a fast MDX-based slide deck tool on top of Vite that uses React and only supports a minimal set of features.
 
-### ReMDX does not have feature XYZ
+### ReMDX does not have feature XYZ!
 
-Fork it, build it, and submit a PR.
+That's not a question. Fork it, build it, and submit a PR.
 
 ### Opinions
 
