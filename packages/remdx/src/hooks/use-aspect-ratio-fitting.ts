@@ -9,7 +9,7 @@ export default function useAspectRatioFitting(aspectRatio: number) {
   const [transformOrigin, setTransformOrigin] = useState({ x: 0, y: 0 });
 
   const recalculate = useCallback<ResizeHandler>(
-    ({ width, height }) => {
+    ({ height, width }) => {
       const containerWidth = Number(width) || 0.01;
       const containerHeight = Number(height) || 0.01;
 

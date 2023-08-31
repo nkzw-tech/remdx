@@ -33,7 +33,7 @@ const parseSlide = (text: string): Slide => {
     text = `---\n${text}`;
   }
 
-  const { data, content } = matter(text.replaceAll(/^--$/gm, '---'));
+  const { content, data } = matter(text.replaceAll(/^--$/gm, '---'));
   return [content, data];
 };
 
@@ -167,8 +167,8 @@ export default function remdx(): Plugin {
         }
 
         return await transform(code, {
+          // @ts-expect-error
           rehypePlugins: [[rehypeRaw, { passThrough: nodeTypes }]],
-          // @ts-ignore
           remarkPlugins: [[shikiTwoslashFn, shikiOptions]],
         });
       }

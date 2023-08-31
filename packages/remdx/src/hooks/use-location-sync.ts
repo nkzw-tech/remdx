@@ -60,8 +60,8 @@ type LocationStateOptions = {
 };
 
 export default function useLocationSync({
-  setState,
   historyFactory = createBrowserHistory,
+  setState,
 }: LocationStateOptions) {
   const [history] = useState(() =>
     typeof document !== 'undefined' ? historyFactory() : null,

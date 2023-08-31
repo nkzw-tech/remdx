@@ -30,16 +30,16 @@ export default function Slide({
   transition?: SlideTransition;
 }): JSX.Element {
   const {
-    onSwiped,
-    navigationDirection,
     activeView,
-    pendingView,
     advanceSlide,
-    regressSlide,
-    commitTransition,
     cancelTransition,
-    transition,
+    commitTransition,
+    navigationDirection,
+    onSwiped,
+    pendingView,
+    regressSlide,
     slideCount,
+    transition,
   } = useContext(DeckContext);
 
   const mergedTransition = useMemo(() => {

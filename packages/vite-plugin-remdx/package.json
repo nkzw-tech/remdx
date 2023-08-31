@@ -14,7 +14,7 @@
     "@mdx-js/mdx": "^2.2.1",
     "gray-matter": "^4.0.3",
     "normalize-newline": "^4.1.0",
-    "rehype-raw": "^6.1.1",
+    "rehype-raw": "^7.0.0",
     "remark-shiki-twoslash": "^3.1.0"
   },
   "devDependencies": {
