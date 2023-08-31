@@ -11,6 +11,7 @@ import { animated, useSpring } from 'react-spring';
 import { useSwipeable } from 'react-swipeable';
 import { DeckContext, SlideTransition } from './deck';
 import { GOTO_FINAL_STEP } from './hooks/use-deck-state';
+import { Transitions } from './transitions';
 
 export default function Slide({
   children,
@@ -43,6 +44,9 @@ export default function Slide({
   } = useContext(DeckContext);
 
   const mergedTransition = useMemo(() => {
+    if (slideTransition === Transitions.none) {
+      return slideTransition;
+    }
     const result = { ...transition };
     if ('from' in slideTransition) {
       result.from = slideTransition.from;

@@ -10,26 +10,12 @@ import useAspectRatioFitting from './hooks/use-aspect-ratio-fitting';
 import useDeckState from './hooks/use-deck-state';
 import useLocationSync from './hooks/use-location-sync';
 import useMousetrap from './hooks/use-mousetrap';
+import { defaultTransition } from './transitions';
 
 export type SlideTransition = {
   enter?: CSSProperties;
   from?: CSSProperties;
   leave?: CSSProperties;
-};
-
-export const defaultTransition: SlideTransition = {
-  enter: {
-    opacity: 1,
-    transform: 'translateX(0%)',
-  },
-  from: {
-    opacity: 0,
-    transform: 'translateX(100%)',
-  },
-  leave: {
-    opacity: 1,
-    transform: 'translateX(-100%)',
-  },
 };
 
 type DeckContextType = {
