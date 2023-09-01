@@ -269,7 +269,8 @@ data-lsp {
 
 pre code div.line.highlight {
   font-weight: bold;
-  background-color: var(--line-highlight-color);
+  background-color: var(--sc-line-highlight-color);
+  border-radius: 10px;
 }
 
 @media (prefers-reduced-motion: reduce) {
