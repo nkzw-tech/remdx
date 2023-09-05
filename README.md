@@ -2,6 +2,10 @@
 
 Create beautiful minimalist presentations with React & MDX.
 
+## Example Presentations
+
+Check out this [Dev Velocity Presentation](https://dev-velocity.nakazawa.dev/) and [the source code](https://github.com/cpojer/dev-velocity-talk).
+
 ## Setup
 
 ```bash
