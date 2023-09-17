@@ -17,6 +17,15 @@ export const defaultTransition: SlideTransition = {
 
 export const Transitions: Record<string, SlideTransition> = {
   default: defaultTransition,
+  leaveOnly: {
+    enter: {
+      transform: 'translateX(0%)',
+    },
+    from: {},
+    leave: {
+      transform: 'translateX(-100%)',
+    },
+  },
   none: {
     enter: {},
     from: {},
