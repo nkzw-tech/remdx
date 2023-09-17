@@ -4,7 +4,8 @@ Create beautiful minimalist presentations with React & MDX.
 
 ## Example Presentations
 
-Check out this [Dev Velocity Presentation](https://dev-velocity.nakazawa.dev/) and [the source code](https://github.com/cpojer/dev-velocity-talk).
+- [Dev Velocity Presentation](https://dev-velocity.nakazawa.dev/): [source code](https://github.com/nkzw-tech/dev-velocity-talk)
+- [Turn Based AI Presentation](https://turn-based-ai.nakazawa.dev/): [source code](https://github.com/nkzw-tech/turn-based-ai-talk)
 
 ## Setup
 
