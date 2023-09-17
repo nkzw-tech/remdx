@@ -10,18 +10,18 @@
   "type": "module",
   "main": "./index",
   "devDependencies": {
-    "@mdx-js/react": "^2.2.1",
-    "@types/mousetrap": "^1.6.8",
-    "@types/react-dom": "^18.2.4",
-    "@types/react": "^18.2.6",
-    "@types/styled-components": "^5.1.15",
+    "@mdx-js/react": "^2.3.0",
+    "@types/mousetrap": "^1.6.11",
+    "@types/react": "^18.2.21",
+    "@types/react-dom": "^18.2.7",
+    "@types/styled-components": "^5.1.27",
     "history": "^5.3.0",
     "mousetrap": "^1.6.5",
-    "react-dom": "^18.2.0",
-    "react-spring": "^9.5.5",
-    "react-swipeable": "^7.0.0",
     "react": "^18.2.0",
-    "use-resize-observer": "^9.0.2"
+    "react-dom": "^18.2.0",
+    "react-spring": "^9.7.2",
+    "react-swipeable": "^7.0.1",
+    "use-resize-observer": "^9.1.0"
   },
   "peerDependencies": {
     "react": "^18.2.0",
