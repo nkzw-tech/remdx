@@ -59,6 +59,7 @@ export default function useAspectRatioFitting(aspectRatio: number) {
     containerRef,
     {
       height: targetHeight,
+      overflow: 'hidden',
       position: 'relative',
       transform: `scale(${scaleFactor})`,
       transformOrigin: `${transformOrigin.x}px ${transformOrigin.y}px`,
