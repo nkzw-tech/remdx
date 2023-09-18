@@ -1,6 +1,6 @@
 {
   "name": "@nkzw/remdx-private",
-  "version": "0.0.1",
+  "version": "0.6.0",
   "author": "Christoph Nakazawa <christoph.pojer@gmail.com>",
   "private": true,
   "repository": {
