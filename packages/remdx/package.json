@@ -1,7 +1,7 @@
 {
   "name": "@nkzw/remdx",
   "description": "Beautiful Minimalist React & MDX Presentations",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": "Christoph Nakazawa <christoph.pojer@gmail.com>",
   "repository": {
     "type": "git",
