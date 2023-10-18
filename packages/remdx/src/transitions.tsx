@@ -1,4 +1,4 @@
-import { SlideTransition } from './deck';
+import { SlideTransition } from './deck.tsx';
 
 export const defaultTransition: SlideTransition = {
   enter: {

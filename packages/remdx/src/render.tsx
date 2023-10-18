@@ -1,6 +1,6 @@
 import { createRoot, Root } from 'react-dom/client';
-import { ReMDXModule } from '../types';
-import slidesToComponent from './slidesToComponent';
+import { ReMDXModule } from '../types.tsx';
+import slidesToComponent from './slidesToComponent.tsx';
 
 const roots = new WeakMap<HTMLElement, Root>();
 

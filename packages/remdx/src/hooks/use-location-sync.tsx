@@ -1,6 +1,6 @@
 import { createBrowserHistory, Location } from 'history';
 import { useCallback, useEffect, useState } from 'react';
-import { DeckView, GOTO_FINAL_STEP } from '../hooks/use-deck-state';
+import { DeckView, GOTO_FINAL_STEP } from './use-deck-state.tsx';
 
 export type SlideState = {
   slideIndex?: number;

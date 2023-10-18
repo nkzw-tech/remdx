@@ -1,9 +1,9 @@
 import { MDXProvider } from '@mdx-js/react';
-import { ReMDXModule } from '../types';
-import DefaultComponents from './components';
-import Deck from './deck';
-import Slide from './slide';
-import { Transitions as DefaultTransitions } from './transitions';
+import { ReMDXModule } from '../types.tsx';
+import DefaultComponents from './components/Components.tsx';
+import Deck from './deck.tsx';
+import Slide from './slide.tsx';
+import { Transitions as DefaultTransitions } from './transitions.tsx';
 
 export default async function slidesToComponent(module: Promise<ReMDXModule>) {
   const { Components, Themes, Transitions, default: slides } = await module;

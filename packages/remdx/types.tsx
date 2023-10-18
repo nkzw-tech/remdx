@@ -1,6 +1,6 @@
 import { MDXProvider } from '@mdx-js/react';
 import { CSSProperties } from 'react';
-import { SlideTransition } from './src/deck';
+import { SlideTransition } from './src/deck.tsx';
 
 type MDXProps = typeof MDXProvider extends React.FC<infer Props>
   ? Props

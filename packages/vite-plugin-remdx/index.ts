@@ -5,7 +5,7 @@ import normalizeNewline from 'normalize-newline';
 import rehypeRaw from 'rehype-raw';
 import shikiTwoslash, { setupForFile } from 'remark-shiki-twoslash';
 import type { Plugin } from 'vite';
-import ColorReplacements from './lib/ColorReplacements';
+import ColorReplacements from './lib/ColorReplacements.tsx';
 
 type Slide = [string, Record<string, unknown>];
 
@@ -169,6 +169,7 @@ export default function remdx(): Plugin {
         return await transform(code, {
           // @ts-expect-error
           rehypePlugins: [[rehypeRaw, { passThrough: nodeTypes }]],
+          // @ts-expect-error
           remarkPlugins: [[shikiTwoslashFn, shikiOptions]],
         });
       }

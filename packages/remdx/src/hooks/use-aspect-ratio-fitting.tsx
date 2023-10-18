@@ -50,6 +50,7 @@ export default function useAspectRatioFitting(aspectRatio: number) {
     recalculate(rects[0]);
   }, [targetWidth, targetHeight, recalculate]);
 
+  // @ts-expect-error
   useResizeObserver({
     onResize: recalculate,
     ref: containerRef,
