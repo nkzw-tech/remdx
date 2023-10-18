@@ -1,7 +1,7 @@
 {
   "name": "@nkzw/remdx-tokyo-example",
   "description": "Beautiful Minimalist React & MDX Presentations",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "author": "Christoph Nakazawa <christoph.pojer@gmail.com>",
   "private": true,
   "repository": {
