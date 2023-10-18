@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import useResizeObserver, { ResizeHandler } from 'use-resize-observer';
 
 export default function useAspectRatioFitting(aspectRatio: number) {
@@ -42,7 +42,7 @@ export default function useAspectRatioFitting(aspectRatio: number) {
     [targetWidth, targetHeight],
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!containerRef || !containerRef.current) {
       return;
     }
