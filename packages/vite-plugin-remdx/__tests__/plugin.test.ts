@@ -37,15 +37,12 @@ theme: dark
 
           export default [(() => {
         function MDXContentWrapper(props) {
-          /*@jsxRuntime automatic @jsxImportSource react*/
-
-
-
-
-    function _createMdxContent(props) {
-      const _components = Object.assign({
-        h1: \\"h1\\"
-      }, _provideComponents(), props.components);
+          function _createMdxContent(props) {
+      const _components = {
+        h1: \\"h1\\",
+        ..._provideComponents(),
+        ...props.components
+      };
       return _jsxDEV(_components.h1, {
         children: \\"Slide 1\\"
       }, undefined, false, {
@@ -55,16 +52,21 @@ theme: dark
       }, this);
     }
     function MDXContent(props = {}) {
-      const {wrapper: MDXLayout} = Object.assign({}, _provideComponents(), props.components);
-      return MDXLayout ? _jsxDEV(MDXLayout, Object.assign({}, props, {
-        children: _jsxDEV(_createMdxContent, props, undefined, false, {
+      const {wrapper: MDXLayout} = {
+        ..._provideComponents(),
+        ...props.components
+      };
+      return MDXLayout ? _jsxDEV(MDXLayout, {
+        ...props,
+        children: _jsxDEV(_createMdxContent, {
+          ...props
+        }, undefined, false, {
           fileName: \\"<source.js>\\"
         }, this)
-      }), undefined, false, {
+      }, undefined, false, {
         fileName: \\"<source.js>\\"
       }, this) : _createMdxContent(props);
     }
-    MDXContent;
           return _jsxDEV(MDXContent, props);
         };
         MDXContentWrapper.isMDXComponent = true;
@@ -72,15 +74,12 @@ theme: dark
         })(),
     (() => {
         function MDXContentWrapper(props) {
-          /*@jsxRuntime automatic @jsxImportSource react*/
-
-
-
-
-    function _createMdxContent(props) {
-      const _components = Object.assign({
-        h1: \\"h1\\"
-      }, _provideComponents(), props.components);
+          function _createMdxContent(props) {
+      const _components = {
+        h1: \\"h1\\",
+        ..._provideComponents(),
+        ...props.components
+      };
       return _jsxDEV(_components.h1, {
         children: \\"Slide 2\\"
       }, undefined, false, {
@@ -90,16 +89,21 @@ theme: dark
       }, this);
     }
     function MDXContent(props = {}) {
-      const {wrapper: MDXLayout} = Object.assign({}, _provideComponents(), props.components);
-      return MDXLayout ? _jsxDEV(MDXLayout, Object.assign({}, props, {
-        children: _jsxDEV(_createMdxContent, props, undefined, false, {
+      const {wrapper: MDXLayout} = {
+        ..._provideComponents(),
+        ...props.components
+      };
+      return MDXLayout ? _jsxDEV(MDXLayout, {
+        ...props,
+        children: _jsxDEV(_createMdxContent, {
+          ...props
+        }, undefined, false, {
           fileName: \\"<source.js>\\"
         }, this)
-      }), undefined, false, {
+      }, undefined, false, {
         fileName: \\"<source.js>\\"
       }, this) : _createMdxContent(props);
     }
-    MDXContent;
           return _jsxDEV(MDXContent, props);
         };
         MDXContentWrapper.isMDXComponent = true;

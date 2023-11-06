@@ -167,7 +167,6 @@ export default function remdx(): Plugin {
         }
 
         return await transform(code, {
-          // @ts-expect-error
           rehypePlugins: [[rehypeRaw, { passThrough: nodeTypes }]],
           // @ts-expect-error
           remarkPlugins: [[shikiTwoslashFn, shikiOptions]],
