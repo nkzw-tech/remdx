@@ -77,8 +77,8 @@ async function create() {
     /pnpm/.test(process.env.npm_config_user_agent || '')
       ? 'pnpm'
       : /yarn/.test(process.env.npm_execpath || '')
-      ? 'yarn'
-      : 'npm';
+        ? 'yarn'
+        : 'npm';
 
   const related = path.relative(cwd, root);
 

@@ -71,8 +71,8 @@ export default function Slide({
       return slideIndex === activeView.slideIndex
         ? [false, false]
         : slideIndex === 0
-        ? [true, false]
-        : [false, true];
+          ? [true, false]
+          : [false, true];
     }
 
     const isWrappingForward =

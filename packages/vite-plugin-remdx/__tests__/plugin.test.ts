@@ -31,7 +31,7 @@ theme: dark
     "
           import React from 'react';
           import { Fragment as _Fragment, jsxDEV as _jsxDEV } from 'react/jsx-dev-runtime';
-          import { useMDXComponents as _provideComponents } from \\"@nkzw/remdx\\";
+          import { useMDXComponents as _provideComponents } from "@nkzw/remdx";
           import data from './data.tsx';
     export { Components } from './Components.tsx';
 
@@ -39,14 +39,14 @@ theme: dark
         function MDXContentWrapper(props) {
           function _createMdxContent(props) {
       const _components = {
-        h1: \\"h1\\",
+        h1: "h1",
         ..._provideComponents(),
         ...props.components
       };
       return _jsxDEV(_components.h1, {
-        children: \\"Slide 1\\"
+        children: "Slide 1"
       }, undefined, false, {
-        fileName: \\"<source.js>\\",
+        fileName: "<source.js>",
         lineNumber: 4,
         columnNumber: 1
       }, this);
@@ -61,10 +61,10 @@ theme: dark
         children: _jsxDEV(_createMdxContent, {
           ...props
         }, undefined, false, {
-          fileName: \\"<source.js>\\"
+          fileName: "<source.js>"
         }, this)
       }, undefined, false, {
-        fileName: \\"<source.js>\\"
+        fileName: "<source.js>"
       }, this) : _createMdxContent(props);
     }
           return _jsxDEV(MDXContent, props);
@@ -76,14 +76,14 @@ theme: dark
         function MDXContentWrapper(props) {
           function _createMdxContent(props) {
       const _components = {
-        h1: \\"h1\\",
+        h1: "h1",
         ..._provideComponents(),
         ...props.components
       };
       return _jsxDEV(_components.h1, {
-        children: \\"Slide 2\\"
+        children: "Slide 2"
       }, undefined, false, {
-        fileName: \\"<source.js>\\",
+        fileName: "<source.js>",
         lineNumber: 5,
         columnNumber: 1
       }, this);
@@ -98,16 +98,16 @@ theme: dark
         children: _jsxDEV(_createMdxContent, {
           ...props
         }, undefined, false, {
-          fileName: \\"<source.js>\\"
+          fileName: "<source.js>"
         }, this)
       }, undefined, false, {
-        fileName: \\"<source.js>\\"
+        fileName: "<source.js>"
       }, this) : _createMdxContent(props);
     }
           return _jsxDEV(MDXContent, props);
         };
         MDXContentWrapper.isMDXComponent = true;
-        return {Component: MDXContentWrapper, data: {\\"theme\\":\\"dark\\"}};
+        return {Component: MDXContentWrapper, data: {"theme":"dark"}};
         })()];
         "
   `);
