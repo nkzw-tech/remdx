@@ -1,7 +1,7 @@
 {
   "name": "@nkzw/vite-plugin-remdx",
   "description": "Beautiful Minimalist React & MDX Presentations",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "author": "Christoph Nakazawa <christoph.pojer@gmail.com>",
   "repository": {
     "type": "git",
