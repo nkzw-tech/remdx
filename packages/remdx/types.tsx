@@ -32,6 +32,12 @@ function MDXProvider(properties: Readonly<MDXProps>): JSX.Element;
 export type MDXComponents = MDXProps['components'];
 export type Themes = Record<string, CSSProperties>;
 
+export type SlideTransition = {
+  enter?: CSSProperties;
+  from?: CSSProperties;
+  leave?: CSSProperties;
+};
+
 export type ReMDXSlide = {
   Component: () => JSX.Element;
   data: Record<string, string>;
@@ -40,5 +46,6 @@ export type ReMDXSlide = {
 export type ReMDXModule = {
   Components?: MDXComponents;
   Themes?: Themes;
+  Transitions?: Record<string, SlideTransition>;
   default: ReadonlyArray<ReMDXSlide>;
 };

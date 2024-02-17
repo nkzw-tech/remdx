@@ -6,17 +6,12 @@ import {
   useEffect,
 } from 'react';
 import { SwipeEventData } from 'react-swipeable';
+import { SlideTransition } from '../types.tsx';
 import useAspectRatioFitting from './hooks/use-aspect-ratio-fitting.tsx';
 import useDeckState from './hooks/use-deck-state.tsx';
 import useLocationSync from './hooks/use-location-sync.tsx';
 import useMousetrap from './hooks/use-mousetrap.tsx';
 import { defaultTransition } from './transitions.tsx';
-
-export type SlideTransition = {
-  enter?: CSSProperties;
-  from?: CSSProperties;
-  leave?: CSSProperties;
-};
 
 type DeckContextType = {
   activeView: {
