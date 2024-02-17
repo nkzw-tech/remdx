@@ -1,8 +1,33 @@
-import { MDXProvider } from '@mdx-js/react';
 import { CSSProperties } from 'react';
 
-type MDXProps =
-  typeof MDXProvider extends React.FC<infer Props> ? Props : never;
+/**
+ * Configuration for `MDXProvider`.
+ */
+type MDXProps = {
+  /**
+   * Children (optional).
+   */
+  children?: ReactNode | null | undefined;
+  /**
+   * Additional components to use or a function that creates them (optional).
+   */
+  components?: Readonly<MDXComponents> | MergeComponents | null | undefined;
+  /**
+   * Turn off outer component context (default: `false`).
+   */
+  disableParentContext?: boolean | null | undefined;
+};
+
+/**
+ * Provider for MDX context.
+ *
+ * @param {Readonly<MDXProps>} properties
+ *   Properties.
+ * @returns {JSX.Element}
+ *   Element.
+ * @satisfies {Component}
+ */
+function MDXProvider(properties: Readonly<MDXProps>): JSX.Element;
 
 export type MDXComponents = MDXProps['components'];
 export type Themes = Record<string, CSSProperties>;
