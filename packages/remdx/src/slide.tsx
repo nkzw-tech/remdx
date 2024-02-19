@@ -9,7 +9,8 @@ import {
 } from 'react';
 import { animated, useSpring } from 'react-spring';
 import { useSwipeable } from 'react-swipeable';
-import { DeckContext, SlideTransition } from './deck.tsx';
+import { SlideTransition } from '../types.tsx';
+import { DeckContext } from './deck.tsx';
 import { GOTO_FINAL_STEP } from './hooks/use-deck-state.tsx';
 import { Transitions } from './transitions.tsx';
 

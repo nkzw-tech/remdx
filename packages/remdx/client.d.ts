@@ -1,9 +1,7 @@
-import type { MDXComponents, ReMDXSlide, Themes } from './types';
-
 declare module '*.re.mdx' {
-  let slides: ReadonlyArray<ReMDXSlide>;
+  let slides: ReadonlyArray<import('./types.jsx').ReMDXSlide>;
 
-  export let Components: MDXComponents | undefined;
-  export let Themes: Themes | undefined;
+  export let Components: import('./types.jsx').MDXComponents | undefined;
+  export let Themes: import('./types.jsx').Themes | undefined;
   export default slides;
 }
