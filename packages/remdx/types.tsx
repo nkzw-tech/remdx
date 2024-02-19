@@ -1,35 +1,8 @@
+import type { MDXComponents as _MDXComponents } from 'mdx/types.js';
 import { CSSProperties } from 'react';
 
-/**
- * Configuration for `MDXProvider`.
- */
-type MDXProps = {
-  /**
-   * Children (optional).
-   */
-  children?: ReactNode | null | undefined;
-  /**
-   * Additional components to use or a function that creates them (optional).
-   */
-  components?: Readonly<MDXComponents> | MergeComponents | null | undefined;
-  /**
-   * Turn off outer component context (default: `false`).
-   */
-  disableParentContext?: boolean | null | undefined;
-};
+export type MDXComponents = _MDXComponents;
 
-/**
- * Provider for MDX context.
- *
- * @param {Readonly<MDXProps>} properties
- *   Properties.
- * @returns {JSX.Element}
- *   Element.
- * @satisfies {Component}
- */
-function MDXProvider(properties: Readonly<MDXProps>): JSX.Element;
-
-export type MDXComponents = MDXProps['components'];
 export type Themes = Record<string, CSSProperties>;
 
 export type SlideTransition = {
@@ -44,7 +17,7 @@ export type ReMDXSlide = {
 };
 
 export type ReMDXModule = {
-  Components?: MDXComponents;
+  Components?: _MDXComponents;
   Themes?: Themes;
   Transitions?: Record<string, SlideTransition>;
   default: ReadonlyArray<ReMDXSlide>;

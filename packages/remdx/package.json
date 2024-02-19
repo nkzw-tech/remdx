@@ -29,5 +29,8 @@
   },
   "scripts": {
     "build": "rm -f index.js; esbuild --format=esm --outfile=index.js --jsx=automatic --external:react --external:react-dom --bundle ./index.tsx"
+  },
+  "dependencies": {
+    "@types/mdx": "^2.0.11"
   }
 }
