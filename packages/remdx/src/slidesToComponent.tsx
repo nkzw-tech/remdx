@@ -6,12 +6,19 @@ import Slide from './slide.tsx';
 import { Transitions as DefaultTransitions } from './transitions.tsx';
 
 export default async function slidesToComponent(module: Promise<ReMDXModule>) {
-  const { Components, Themes, Transitions, default: slides } = await module;
+  const {
+    Components,
+    Container,
+    Themes,
+    Transitions,
+    default: slides,
+  } = await module;
   return (
     <MDXProvider components={{ ...DefaultComponents, ...Components }}>
       <Deck
         slides={slides.map(({ Component, data }, index) => (
           <Slide
+            container={Container}
             id={index}
             image={data?.image}
             key={index}

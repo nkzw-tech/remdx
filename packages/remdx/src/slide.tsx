@@ -9,7 +9,7 @@ import {
 } from 'react';
 import { animated, useSpring } from 'react-spring';
 import { useSwipeable } from 'react-swipeable';
-import { SlideTransition } from '../types.tsx';
+import { SlideContainer, SlideTransition } from '../types.tsx';
 import { DeckContext } from './deck.tsx';
 import { GOTO_FINAL_STEP } from './hooks/use-deck-state.tsx';
 import { Transitions } from './transitions.tsx';
@@ -17,6 +17,9 @@ import { Transitions } from './transitions.tsx';
 export default function Slide({
   children,
   className,
+  container: Container = ({ children, style }) => (
+    <div style={style}>{children}</div>
+  ),
   id,
   image,
   padding = 48,
@@ -25,6 +28,7 @@ export default function Slide({
 }: {
   children: ReactNode;
   className?: string;
+  container?: SlideContainer;
   id: number;
   image?: string;
   padding?: string | number;
@@ -226,7 +230,7 @@ export default function Slide({
         }}
         {...swipeHandler}
       >
-        <div
+        <Container
           style={{
             display: 'flex',
             flex: 1,
@@ -236,7 +240,7 @@ export default function Slide({
           }}
         >
           <Suspense>{children}</Suspense>
-        </div>
+        </Container>
       </div>
     </animated.div>
   );
