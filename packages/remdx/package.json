@@ -1,7 +1,7 @@
 {
   "name": "@nkzw/remdx",
   "description": "Beautiful Minimalist React & MDX Presentations",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "author": "Christoph Nakazawa <christoph.pojer@gmail.com>",
   "repository": {
     "type": "git",
@@ -9,8 +9,10 @@
   },
   "type": "module",
   "main": "./index",
+  "dependencies": {
+    "@mdx-js/react": "^3.0.1"
+  },
   "devDependencies": {
-    "@mdx-js/react": "^3.0.1",
     "@types/mousetrap": "^1.6.15",
     "@types/react": "^18.2.67",
     "@types/react-dom": "^18.2.22",
@@ -29,8 +31,5 @@
   },
   "scripts": {
     "build": "rm -f index.js; esbuild --format=esm --outfile=index.js --jsx=automatic --external:react --external:react-dom --bundle ./index.tsx"
-  },
-  "dependencies": {
-    "@types/mdx": "^2.0.11"
   }
 }

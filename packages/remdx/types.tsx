@@ -1,7 +1,7 @@
-import type { MDXComponents as _MDXComponents } from 'mdx/types.js';
-import { CSSProperties, ReactNode } from 'react';
+import type { useMDXComponents } from '@mdx-js/react';
+import type { CSSProperties, ReactNode } from 'react';
 
-export type MDXComponents = _MDXComponents;
+export type MDXComponents = Parameters<typeof useMDXComponents>[0];
 
 export type Themes = Record<string, CSSProperties>;
 
@@ -25,7 +25,7 @@ export type ReMDXSlide = Readonly<{
 }>;
 
 export type ReMDXModule = Readonly<{
-  Components?: _MDXComponents;
+  Components?: MDXComponents;
   Container?: SlideContainer;
   Themes?: Themes;
   Transitions?: Record<string, SlideTransition>;
