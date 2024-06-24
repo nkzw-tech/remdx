@@ -1,5 +1,5 @@
 import type { useMDXComponents } from '@mdx-js/react';
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties, JSX, ReactNode } from 'react';
 
 export type MDXComponents = Parameters<typeof useMDXComponents>[0];
 
