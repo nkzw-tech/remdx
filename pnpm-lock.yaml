@@ -18,8 +18,8 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(prettier@3.3.2)
       '@nkzw/eslint-config':
-        specifier: ^1.16.0
-        version: 1.16.0(eslint@8.57.0)(typescript@5.5.2)
+        specifier: ^1.17.0
+        version: 1.17.0(eslint@8.57.0)(typescript@5.5.2)
       '@styled/typescript-styled-plugin':
         specifier: ^1.0.1
         version: 1.0.1
@@ -525,8 +525,8 @@ packages:
       '@types/react': '>=16'
       react: '>=16'
 
-  '@nkzw/eslint-config@1.16.0':
-    resolution: {integrity: sha512-Ko1h7NPtrGJati7jEW/z1sxZh6+O0m88vE0l0XCjzbCJr+lfLJh+yYTwho5ejRYigFbsFmWyVsAO47MtNh5eSg==}
+  '@nkzw/eslint-config@1.17.0':
+    resolution: {integrity: sha512-SdlRRHtMB01UQU+2IKJSDNwW7WHX3vPiLXAwhsOyT3oL2Mgc/RbSiZI3ouxv1bs//RBXR21vSqmxxJMeLT4+HQ==}
     peerDependencies:
       eslint: '>= 8'
 
@@ -1459,8 +1459,8 @@ packages:
       eslint: ^7 || ^8
       typescript: ^3 || ^4 || ^5
 
-  eslint-plugin-unicorn@53.0.0:
-    resolution: {integrity: sha512-kuTcNo9IwwUCfyHGwQFOK/HjJAYzbODHN3wP0PgqbW+jbXqpNWxNVpVhj2tO9SixBwuAdmal8rVcWKBxwFnGuw==}
+  eslint-plugin-unicorn@54.0.0:
+    resolution: {integrity: sha512-XxYLRiYtAWiAjPv6z4JREby1TAE2byBC7wlh0V4vWDCpccOSU1KovWV//jqPXF6bq3WKxqX9rdjoRQ1EhdmNdQ==}
     engines: {node: '>=18.18'}
     peerDependencies:
       eslint: '>=8.56.0'
@@ -3549,7 +3549,7 @@ snapshots:
       '@types/react': 18.3.3
       react: 18.3.1
 
-  '@nkzw/eslint-config@1.16.0(eslint@8.57.0)(typescript@5.5.2)':
+  '@nkzw/eslint-config@1.17.0(eslint@8.57.0)(typescript@5.5.2)':
     dependencies:
       '@nkzw/eslint-plugin': 1.8.0(eslint@8.57.0)
       '@typescript-eslint/eslint-plugin': 7.13.1(@typescript-eslint/parser@7.13.1(eslint@8.57.0)(typescript@5.5.2))(eslint@8.57.0)(typescript@5.5.2)
@@ -3563,7 +3563,7 @@ snapshots:
       eslint-plugin-sort-destructure-keys: 2.0.0(eslint@8.57.0)
       eslint-plugin-sort-keys-fix: 1.1.2
       eslint-plugin-typescript-sort-keys: 3.2.0(@typescript-eslint/parser@7.13.1(eslint@8.57.0)(typescript@5.5.2))(eslint@8.57.0)(typescript@5.5.2)
-      eslint-plugin-unicorn: 53.0.0(eslint@8.57.0)
+      eslint-plugin-unicorn: 54.0.0(eslint@8.57.0)
       eslint-plugin-unused-imports: 4.0.0(@typescript-eslint/eslint-plugin@7.13.1(@typescript-eslint/parser@7.13.1(eslint@8.57.0)(typescript@5.5.2))(eslint@8.57.0)(typescript@5.5.2))(eslint@8.57.0)
     transitivePeerDependencies:
       - eslint-import-resolver-node
@@ -4685,7 +4685,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-unicorn@53.0.0(eslint@8.57.0):
+  eslint-plugin-unicorn@54.0.0(eslint@8.57.0):
     dependencies:
       '@babel/helper-validator-identifier': 7.24.7
       '@eslint-community/eslint-utils': 4.4.0(eslint@8.57.0)
