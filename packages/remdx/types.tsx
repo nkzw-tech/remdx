@@ -15,12 +15,12 @@ export type SlideContainer = ({
   children,
   style,
 }: {
-  children: JSX.Element;
+  children: React.JSX.Element;
   style: CSSProperties;
 }) => ReactNode;
 
 export type ReMDXSlide = Readonly<{
-  Component: () => JSX.Element;
+  Component: () => React.JSX.Element;
   data: Record<string, string>;
 }>;
 
