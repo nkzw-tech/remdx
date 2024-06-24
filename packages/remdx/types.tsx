@@ -1,5 +1,5 @@
 import type { useMDXComponents } from '@mdx-js/react';
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties, JSX, ReactNode } from 'react';
 
 export type MDXComponents = Parameters<typeof useMDXComponents>[0];
 
@@ -15,12 +15,12 @@ export type SlideContainer = ({
   children,
   style,
 }: {
-  children: React.JSX.Element;
+  children: JSX.Element;
   style: CSSProperties;
 }) => ReactNode;
 
 export type ReMDXSlide = Readonly<{
-  Component: () => React.JSX.Element;
+  Component: () => JSX.Element;
   data: Record<string, string>;
 }>;
 
