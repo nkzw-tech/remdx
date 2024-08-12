@@ -4,8 +4,8 @@
   "type": "module",
   "dependencies": {
     "@nkzw/remdx": "*",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "rc",
+    "react-dom": "rc"
   },
   "devDependencies": {
     "@nkzw/vite-plugin-remdx": "*",
