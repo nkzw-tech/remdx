@@ -10,7 +10,7 @@ import ColorReplacements from './lib/ColorReplacements.tsx';
 type Slide = [string, Record<string, unknown>];
 
 const EXPORT_DEFAULT_REGEXP = /export\sdefault\s/g;
-const MODULE_REGEXP = /\\`|`(?:\\`|[^`])*`|(^(?:import|export).*$)/gm;
+const MODULE_REGEXP = /\\`|`(?:\\`|[^`])*`|(^(?:import|export)[^;]+;)/gm;
 
 const compileMDX = async (
   content: string,
