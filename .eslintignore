@@ -1,3 +1,4 @@
 dist/
 packages/*/index.js
 packages/create-remdx/template
+packages/remdx/index.d.ts
