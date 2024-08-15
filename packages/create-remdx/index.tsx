@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 // Copied and modified from https://github.com/slidevjs/slidev/blob/main/packages/create-app/index.js
 // MIT License – Copyright (c) 2020-2021 Anthony Fu
 import fs from 'node:fs';

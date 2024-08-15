@@ -21,7 +21,7 @@
     "mousetrap": "^1.6.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-spring": "^9.7.3",
+    "react-spring": "^9.7.4",
     "react-swipeable": "^7.0.1",
     "use-resize-observer": "^9.1.0"
   },
