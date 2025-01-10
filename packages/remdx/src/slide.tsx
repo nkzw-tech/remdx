@@ -34,7 +34,7 @@ export default function Slide({
   padding?: string | number;
   style?: CSSProperties;
   transition?: SlideTransition;
-}): JSX.Element {
+}) {
   const {
     activeView,
     advanceSlide,
@@ -203,6 +203,7 @@ export default function Slide({
   });
 
   return (
+    // @ts-expect-error
     <animated.div
       style={{
         background: 'transparent',
