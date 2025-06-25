@@ -27,7 +27,7 @@ export type ReMDXSlide = Readonly<{
 export type ReMDXModule = Readonly<{
   Components?: MDXComponents;
   Container?: SlideContainer;
+  default: ReadonlyArray<ReMDXSlide>;
   Themes?: Themes;
   Transitions?: Record<string, SlideTransition>;
-  default: ReadonlyArray<ReMDXSlide>;
 }>;

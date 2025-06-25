@@ -6,7 +6,6 @@
 // MIT License – Copyright (c) 2020-2021 Anthony Fu
 import fs from 'node:fs';
 import path from 'node:path';
-// @ts-expect-error
 import { execa } from 'execa';
 import { blue, bold, dim, green, yellow } from 'kolorist';
 import prompts from 'prompts';

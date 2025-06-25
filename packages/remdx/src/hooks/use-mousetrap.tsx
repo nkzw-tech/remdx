@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 
 export default function useMousetrap(
   keybinds: Record<string, (e?: ExtendedKeyboardEvent) => void>,
-  deps: unknown[],
 ): void {
   useEffect(() => {
     for (const combo in keybinds) {
@@ -20,6 +19,5 @@ export default function useMousetrap(
         Mousetrap.unbind(combo);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keybinds, ...deps]);
+  }, [keybinds]);
 }

@@ -9,9 +9,9 @@ export default async function slidesToComponent(module: Promise<ReMDXModule>) {
   const {
     Components,
     Container,
+    default: slides,
     Themes,
     Transitions,
-    default: slides,
   } = await module;
   return (
     <MDXProvider components={{ ...DefaultComponents, ...Components }}>

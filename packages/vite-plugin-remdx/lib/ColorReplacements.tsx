@@ -1,6 +1,6 @@
 /* @generated */
 
-/* eslint-disable sort-keys-fix/sort-keys-fix */
+/* eslint-disable perfectionist/sort-objects */
 export default {
   '#fffefc': 'var(--sc-editor-background)',
   '#FFE792': 'var(--sc-editor-findmatchbackground)',

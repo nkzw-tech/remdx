@@ -12,7 +12,7 @@ export default [
   },
   {
     rules: {
-      'import/no-extraneous-dependencies': 0,
+      'import-x/no-extraneous-dependencies': 0,
     },
   },
   {

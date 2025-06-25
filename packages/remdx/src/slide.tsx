@@ -203,7 +203,6 @@ export default function Slide({
   });
 
   return (
-    // @ts-expect-error
     <animated.div
       style={{
         background: 'transparent',

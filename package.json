@@ -13,35 +13,40 @@
     "pnpm": ">=7.9.1"
   },
   "devDependencies": {
-    "@babel/plugin-syntax-typescript": "^7.25.9",
-    "@ianvs/prettier-plugin-sort-imports": "^4.4.0",
-    "@nkzw/eslint-config": "^2.0.0",
+    "@babel/plugin-syntax-typescript": "^7.27.1",
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.2",
+    "@nkzw/eslint-config": "^3.0.1",
     "@styled/typescript-styled-plugin": "^1.0.1",
-    "@swc/core": "^1.10.4",
-    "@types/node": "^22.10.5",
+    "@swc/core": "^1.12.6",
+    "@types/node": "^24.0.4",
     "dts-bundle-generator": "^9.5.1",
-    "esbuild": "^0.24.2",
-    "eslint": "^9.17.0",
-    "nodemon": "^3.1.9",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^3.4.2",
+    "esbuild": "^0.25.5",
+    "eslint": "^9.29.0",
+    "nodemon": "^3.1.10",
+    "npm-run-all2": "^8.0.4",
+    "prettier": "^3.6.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3",
-    "vite": "^6.0.7",
-    "vitest": "^2.1.8"
+    "typescript": "^5.8.3",
+    "vite": "^7.0.0",
+    "vitest": "^3.2.4"
   },
   "pnpm": {
     "overrides": {
       "shiki": "^0.11.0"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "esbuild",
+      "unrs-resolver"
+    ]
   },
   "scripts": {
     "build": "(cd ./packages/create-remdx && pnpm build) && (cd ./packages/remdx && pnpm build) && (cd ./packages/vite-plugin-remdx && pnpm build) && dts-bundle-generator -o ./packages/remdx/index.d.ts ./packages/remdx/index.tsx",
     "dev:setup": "pnpm install",
     "dev:update-deps": "rm -rf pnpm-lock.yaml node_modules/ **/node_modules && pnpm dev:setup",
     "dev": "cd examples/tokyo && pnpm dev",
-    "format": "prettier --write .",
-    "lint:format": "prettier --cache --check .",
+    "format": "prettier --experimental-cli --write .",
+    "lint:format": "prettier --experimental-cli --cache --check .",
     "lint": "eslint --cache .",
     "test": "npm-run-all --parallel tsc:check vitest:run lint lint:format",
     "tsc:check": "tsc",

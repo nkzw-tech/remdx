@@ -4,6 +4,7 @@ import {
   ReactNode,
   useCallback,
   useEffect,
+  useMemo,
 } from 'react';
 import { SwipeEventData } from 'react-swipeable';
 import { SlideTransition } from '../types.tsx';
@@ -67,8 +68,8 @@ export default function Deck({
     advanceSlide,
     cancelTransition,
     commitTransition,
-    initializeTo,
     initialized,
+    initializeTo,
     navigationDirection,
     pendingView,
     regressSlide,
@@ -93,11 +94,13 @@ export default function Deck({
   );
 
   useMousetrap(
-    {
-      left: () => stepBackward(),
-      right: () => stepForward(),
-    },
-    [stepForward, stepBackward],
+    useMemo(
+      () => ({
+        left: () => stepBackward(),
+        right: () => stepForward(),
+      }),
+      [stepForward, stepBackward],
+    ),
   );
 
   const [syncLocation, onActiveStateChange] = useLocationSync({
