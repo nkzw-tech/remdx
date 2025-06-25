@@ -1,16 +1,24 @@
 {
   "name": "@nkzw/remdx-private",
-  "version": "0.16.0",
-  "author": "Christoph Nakazawa <christoph.pojer@gmail.com>",
+  "version": "0.17.0",
   "private": true,
   "repository": {
     "type": "git",
     "url": "git://github.com/cpojer/remdx.git"
   },
+  "author": "Christoph Nakazawa <christoph.pojer@gmail.com>",
   "type": "module",
-  "engines": {
-    "node": ">=18.7.0",
-    "pnpm": ">=7.9.1"
+  "scripts": {
+    "build": "(cd ./packages/create-remdx && pnpm build) && (cd ./packages/remdx && pnpm build) && (cd ./packages/vite-plugin-remdx && pnpm build)",
+    "dev": "cd examples/tokyo && pnpm dev",
+    "dev:setup": "pnpm install",
+    "dev:update-deps": "rm -rf pnpm-lock.yaml node_modules/ **/node_modules && pnpm dev:setup",
+    "format": "prettier --experimental-cli --write .",
+    "lint": "eslint --cache .",
+    "lint:format": "prettier --experimental-cli --cache --check .",
+    "test": "npm-run-all --parallel tsc:check vitest:run lint lint:format",
+    "tsc:check": "tsc",
+    "vitest:run": "vitest run"
   },
   "devDependencies": {
     "@babel/plugin-syntax-typescript": "^7.27.1",
@@ -19,37 +27,28 @@
     "@styled/typescript-styled-plugin": "^1.0.1",
     "@swc/core": "^1.12.6",
     "@types/node": "^24.0.4",
-    "dts-bundle-generator": "^9.5.1",
-    "esbuild": "^0.25.5",
     "eslint": "^9.29.0",
     "nodemon": "^3.1.10",
     "npm-run-all2": "^8.0.4",
     "prettier": "^3.6.0",
+    "prettier-plugin-packagejson": "^2.5.15",
     "ts-node": "^10.9.2",
+    "tsdown": "^0.12.9",
     "typescript": "^5.8.3",
     "vite": "^7.0.0",
     "vitest": "^3.2.4"
   },
+  "engines": {
+    "node": ">=18.7.0",
+    "pnpm": ">=7.9.1"
+  },
   "pnpm": {
-    "overrides": {
-      "shiki": "^0.11.0"
-    },
     "onlyBuiltDependencies": [
       "@swc/core",
-      "esbuild",
       "unrs-resolver"
-    ]
-  },
-  "scripts": {
-    "build": "(cd ./packages/create-remdx && pnpm build) && (cd ./packages/remdx && pnpm build) && (cd ./packages/vite-plugin-remdx && pnpm build) && dts-bundle-generator -o ./packages/remdx/index.d.ts ./packages/remdx/index.tsx",
-    "dev:setup": "pnpm install",
-    "dev:update-deps": "rm -rf pnpm-lock.yaml node_modules/ **/node_modules && pnpm dev:setup",
-    "dev": "cd examples/tokyo && pnpm dev",
-    "format": "prettier --experimental-cli --write .",
-    "lint:format": "prettier --experimental-cli --cache --check .",
-    "lint": "eslint --cache .",
-    "test": "npm-run-all --parallel tsc:check vitest:run lint lint:format",
-    "tsc:check": "tsc",
-    "vitest:run": "vitest run"
+    ],
+    "overrides": {
+      "shiki": "^0.11.0"
+    }
   }
 }

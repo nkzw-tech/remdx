@@ -1,14 +1,18 @@
 {
   "name": "@nkzw/remdx-tokyo-example",
-  "description": "Beautiful Minimalist React & MDX Presentations",
-  "version": "0.16.0",
-  "author": "Christoph Nakazawa <christoph.pojer@gmail.com>",
+  "version": "0.17.0",
   "private": true,
+  "description": "Beautiful Minimalist React & MDX Presentations",
   "repository": {
     "type": "git",
     "url": "git://github.com/cpojer/remdx.git"
   },
+  "author": "Christoph Nakazawa <christoph.pojer@gmail.com>",
   "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite dev"
+  },
   "dependencies": {
     "@nkzw/remdx": "workspace:*",
     "react": "^19.1.0",
@@ -20,9 +24,5 @@
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
     "vite": "^7.0.0"
-  },
-  "scripts": {
-    "build": "vite build",
-    "dev": "vite dev"
   }
 }

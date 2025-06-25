@@ -2,6 +2,10 @@
   "name": "remdx-template",
   "version": "0.0.1",
   "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite dev"
+  },
   "dependencies": {
     "@nkzw/remdx": "*",
     "react": "^19.1.0",
@@ -18,9 +22,5 @@
     "overrides": {
       "shiki": "^0.11.0"
     }
-  },
-  "scripts": {
-    "build": "vite build",
-    "dev": "vite dev"
   }
 }
