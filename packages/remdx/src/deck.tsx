@@ -123,6 +123,39 @@ export default function Deck({
     );
   }, [initializeTo, syncLocation]);
 
+  const value = useMemo(
+    () => ({
+      activeView,
+      advanceSlide,
+      cancelTransition,
+      commitTransition,
+      initialized,
+      navigationDirection,
+      onSwiped,
+      pendingView,
+      regressSlide,
+      slideCount: slides.length,
+      stepBackward,
+      stepForward,
+      transition,
+    }),
+    [
+      activeView,
+      advanceSlide,
+      cancelTransition,
+      commitTransition,
+      initialized,
+      navigationDirection,
+      onSwiped,
+      pendingView,
+      regressSlide,
+      slides.length,
+      stepBackward,
+      stepForward,
+      transition,
+    ],
+  );
+
   return (
     <div
       className={className}
@@ -132,23 +165,7 @@ export default function Deck({
         ...backdropStyle,
       }}
     >
-      <DeckContext.Provider
-        value={{
-          activeView,
-          advanceSlide,
-          cancelTransition,
-          commitTransition,
-          initialized,
-          navigationDirection,
-          onSwiped,
-          pendingView,
-          regressSlide,
-          slideCount: slides.length,
-          stepBackward,
-          stepForward,
-          transition,
-        }}
-      >
+      <DeckContext.Provider value={value}>
         <div style={{ ...fitAspectRatioStyle, ...style }}>{slides}</div>
       </DeckContext.Provider>
     </div>
