@@ -11,7 +11,7 @@ export default function Image({
   const [src, query] = source.split('?');
   return (
     <img
-      loading="lazy"
+      loading="eager"
       src={src}
       style={Object.fromEntries(new URLSearchParams(query))}
       {...props}

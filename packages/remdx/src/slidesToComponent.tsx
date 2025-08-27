@@ -13,6 +13,16 @@ export default async function slidesToComponent(module: Promise<ReMDXModule>) {
     Themes,
     Transitions,
   } = await module;
+
+  // Preload background images.
+  for (const { data } of slides) {
+    const { image } = data;
+    if (image) {
+      const element = new Image();
+      element.src = image;
+    }
+  }
+
   return (
     <MDXProvider components={{ ...DefaultComponents, ...Components }}>
       <Deck
