@@ -51,7 +51,7 @@ async function create() {
 
   console.log(dim('  Scaffolding project in ') + targetDir + dim(' ...'));
 
-  const templateDir = path.join(__dirname, 'template');
+  const templateDir = path.join(import.meta.dirname, 'template');
 
   const write = (file: string, content?: string) => {
     const targetPath = path.join(root, file);
