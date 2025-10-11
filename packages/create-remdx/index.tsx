@@ -11,6 +11,7 @@ import { blue, bold, dim, green, yellow } from 'kolorist';
 import prompts from 'prompts';
 
 const argv = require('minimist')(process.argv.slice(2));
+const __dirname = import.meta.dirname;
 const cwd = process.cwd();
 
 async function create() {
