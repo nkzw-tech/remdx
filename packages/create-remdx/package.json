@@ -1,6 +1,6 @@
 {
   "name": "create-remdx",
-  "version": "0.17.1",
+  "version": "0.17.2",
   "description": "Beautiful Minimalist React & MDX Presentations",
   "repository": {
     "type": "git",
@@ -15,6 +15,7 @@
     "build": "rm -f index.js; tsdown index.tsx --outDir=./ --clean=false --target=node22 --format=esm"
   },
   "devDependencies": {
+    "@types/minimist": "^1.2.5",
     "@types/prompts": "^2.4.9",
     "execa": "^9.6.0",
     "kolorist": "^1.8.0",

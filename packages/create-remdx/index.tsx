@@ -1,16 +1,15 @@
 #!/usr/bin/env node
 
-/* eslint-disable @typescript-eslint/no-require-imports */
-
 // Copied and modified from https://github.com/slidevjs/slidev/blob/main/packages/create-app/index.js
 // MIT License – Copyright (c) 2020-2021 Anthony Fu
-import fs from 'node:fs';
+import fs, { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { execa } from 'execa';
 import { blue, bold, dim, green, yellow } from 'kolorist';
+import minimist from 'minimist';
 import prompts from 'prompts';
 
-const argv = require('minimist')(process.argv.slice(2));
+const argv = minimist(process.argv.slice(2));
 const cwd = process.cwd();
 
 async function create() {
@@ -67,7 +66,9 @@ async function create() {
     write(file);
   }
 
-  const pkg = require(path.join(templateDir, 'package.json'));
+  const pkg = JSON.parse(
+    readFileSync(path.join(templateDir, 'package.json'), 'utf8'),
+  );
 
   pkg.name = packageName;
 
