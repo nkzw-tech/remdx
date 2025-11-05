@@ -9,10 +9,10 @@
   "author": "Christoph Nakazawa <christoph.pojer@gmail.com>",
   "type": "module",
   "bin": {
-    "create-remdx": "index.js"
+    "create-remdx": "index.mjs"
   },
   "scripts": {
-    "build": "rm -f index.js; tsdown index.tsx --outDir=./ --clean=false --target=node22 --format=esm"
+    "build": "rm -f index.mjs; tsdown index.tsx --outDir=./ --clean=false --target=node22 --format=esm"
   },
   "devDependencies": {
     "@types/minimist": "^1.2.5",

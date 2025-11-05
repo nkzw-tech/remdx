@@ -6,6 +6,7 @@ export default [
     ignores: [
       'dist/',
       'packages/*/index.js',
+      'packages/*/index.mjs',
       'packages/create-remdx/template',
       'packages/remdx/index.d.ts',
     ],
