@@ -1,6 +1,6 @@
 {
   "name": "@nkzw/vite-plugin-remdx",
-  "version": "0.17.1",
+  "version": "0.18.0",
   "description": "Beautiful Minimalist React & MDX Presentations",
   "repository": {
     "type": "git",
