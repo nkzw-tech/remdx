@@ -8,7 +8,7 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        node-version: [20]
+        node-version: [24]
         test-suite: [check, vitest]
 
     steps:
@@ -19,7 +19,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - uses: pnpm/action-setup@v2
         with:
-          version: 8.*
+          version: 10.*
       - run: pnpm dev:setup
 
       - name: Run checks

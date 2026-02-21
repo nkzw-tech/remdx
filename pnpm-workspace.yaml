@@ -1,7 +1,8 @@
 packages:
-  - 'examples/*'
-  - 'packages/*'
+  - examples/*
+  - packages/*
 
 onlyBuiltDependencies:
   - '@swc/core'
+  - esbuild
   - unrs-resolver

@@ -18,7 +18,7 @@
     "lint:format": "prettier --experimental-cli --cache --check .",
     "test": "npm-run-all --parallel tsc:check vitest:run lint lint:format",
     "tsc:check": "tsc",
-    "vitest:run": "NODE_OPTIONS='--no-webstorage' vitest run"
+    "vitest:run": "vitest run"
   },
   "devDependencies": {
     "@babel/plugin-syntax-typescript": "^7.28.6",
