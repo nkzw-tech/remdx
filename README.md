@@ -4,6 +4,7 @@ Create beautiful minimalist presentations with React & MDX.
 
 ## Example Presentations
 
+- [Building Scalable Applications](https://scalable-apps.nakazawa.dev): [source code](https://github.com/nkzw-tech/building-scalable-applications-talk)
 - [Dev Velocity Presentation](https://dev-velocity.nakazawa.dev/): [source code](https://github.com/nkzw-tech/dev-velocity-talk)
 - [Turn Based AI Presentation](https://turn-based-ai.nakazawa.dev/): [source code](https://github.com/nkzw-tech/turn-based-ai-talk)
 
