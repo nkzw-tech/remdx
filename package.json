@@ -18,25 +18,25 @@
     "lint:format": "prettier --experimental-cli --cache --check .",
     "test": "npm-run-all --parallel tsc:check vitest:run lint lint:format",
     "tsc:check": "tsc",
-    "vitest:run": "vitest run"
+    "vitest:run": "NODE_OPTIONS='--no-webstorage' vitest run"
   },
   "devDependencies": {
-    "@babel/plugin-syntax-typescript": "^7.27.1",
-    "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
-    "@nkzw/eslint-config": "^3.2.0",
+    "@babel/plugin-syntax-typescript": "^7.28.6",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+    "@nkzw/eslint-config": "^3.3.0",
     "@styled/typescript-styled-plugin": "^1.0.1",
-    "@swc/core": "^1.15.0",
-    "@types/node": "^24.10.0",
+    "@swc/core": "^1.15.11",
+    "@types/node": "^25.3.0",
     "eslint": "^9.39.1",
-    "nodemon": "^3.1.10",
+    "nodemon": "^3.1.14",
     "npm-run-all2": "^8.0.4",
-    "prettier": "^3.6.2",
-    "prettier-plugin-packagejson": "^2.5.19",
+    "prettier": "^3.8.1",
+    "prettier-plugin-packagejson": "^3.0.0",
     "ts-node": "^10.9.2",
-    "tsdown": "^0.16.0",
+    "tsdown": "^0.20.3",
     "typescript": "^5.9.3",
-    "vite": "^7.2.0",
-    "vitest": "^4.0.7"
+    "vite": "^7.3.1",
+    "vitest": "^4.0.18"
   },
   "engines": {
     "node": ">=18.7.0",
