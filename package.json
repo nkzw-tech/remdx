@@ -1,6 +1,6 @@
 {
   "name": "@nkzw/remdx-private",
-  "version": "0.18.0",
+  "version": "19.0.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -39,16 +39,7 @@
     "vitest": "^4.0.18"
   },
   "engines": {
-    "node": ">=18.7.0",
-    "pnpm": ">=7.9.1"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@swc/core",
-      "unrs-resolver"
-    ],
-    "overrides": {
-      "shiki": "^0.11.0"
-    }
+    "node": ">=24.0.0",
+    "pnpm": ">=10.30.1"
   }
 }

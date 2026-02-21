@@ -112,3 +112,29 @@ theme: dark
         "
   `);
 });
+
+test('shiki metadata is preserved for titles and highlighted lines', async () => {
+  const transformFn = remdx().transform as unknown as (
+    code: string,
+    id: string,
+  ) => Promise<string>;
+
+  const fence = '```';
+  const output = await transformFn(
+    [
+      '# Slide',
+      '',
+      `${fence}js title="demo.ts" {2}`,
+      'const a = 1;',
+      'const b = 2;',
+      fence,
+      '',
+    ].join('\n'),
+    'slides.re.mdx',
+  );
+
+  expect(output).toContain('"data-title": "demo.ts"');
+  expect(output).toContain('className: "line highlighted"');
+  expect(output).toContain('className: "shiki shiki-themes Licht Dunkel"');
+  expect(output).toContain('--shiki-dark');
+});

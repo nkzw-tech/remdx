@@ -4,6 +4,9 @@
 /dist/
 /node_modules/
 coverage
+packages/create-remdx/index.mjs
 packages/remdx/index.d.ts
+packages/remdx/index.js
+packages/vite-plugin-remdx/index.mjs
 tsconfig.tsbuildinfo
 vite.config.ts.timestamp-*

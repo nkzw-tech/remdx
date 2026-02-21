@@ -1,3 +1,7 @@
 packages:
   - 'examples/*'
   - 'packages/*'
+
+onlyBuiltDependencies:
+  - '@swc/core'
+  - unrs-resolver

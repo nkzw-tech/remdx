@@ -59,7 +59,7 @@ Then create your `slides.re.mdx` and start the dev server via `npx run vite dev`
 - Front matter blocks can be inserted at the top of a slide and separated from the slide content by two dashes: `--`. The theme can be set via `theme: <name>`, and background images can be set via `image: <url>`, referring to images in the `public/` folder.
 - You can export a set of HTML and custom components using `export { Components } from './Components'`. The `Components.tsx` file should export an object with component names mapping to their implementation as default export.
 - ReMDX provides a default theme, but you can leave it out and bring your own or customize styles via
-- Code blocks are styled via [`shiki-twoslash`](https://shikijs.github.io/twoslash/) and support syntax highlighting via [CSS variables](https://github.com/nkzw-tech/remdx/blob/main/packages/remdx/style.css).
+- Code blocks are styled via [`shiki`](https://shiki.style/) and support syntax highlighting via [CSS variables](https://github.com/nkzw-tech/remdx/blob/main/packages/remdx/style.css).
 - The inbuilt image component used for inline images via Markdown syntax (for example: `![Tokyo in the Dark](dark.jpg?height=60vh&borderRadius=20px)`) can be styled by passing CSS properties to the query string.
 - If you are using ReMDX for presentations and you like it, please add a slide or note at the end saying "Made with [ReMDX](https://github.com/nkzw-tech/remdx)". If you can, share the source of your slide deck with the community.
 

@@ -1,6 +1,6 @@
 {
   "name": "remdx-template",
-  "version": "0.18.0",
+  "version": "19.0.0",
   "type": "module",
   "scripts": {
     "build": "vite build",
@@ -17,10 +17,5 @@
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
     "vite": "^7.0.0"
-  },
-  "pnpm": {
-    "overrides": {
-      "shiki": "^0.11.0"
-    }
   }
 }
