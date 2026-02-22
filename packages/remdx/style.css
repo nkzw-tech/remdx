@@ -174,7 +174,8 @@ pre.shiki {
   background-color: var(--sc-background-color);
   color: var(--sc-text-color);
   position: relative;
-  padding-right: 12px;
+  border-radius: 4px;
+  padding: 0 12px 4px 2px;
   font-family: 'Fira Code', monospace;
 }
 
@@ -261,13 +262,13 @@ pre code .line::before {
   display: inline-block;
   text-align: right;
   color: var(--sc-line-number-color);
-  padding-right: 0.125rem;
+  padding-right: 2px;
 }
 
 code:not(:where(pre *)) {
-  border-radius: 0.25rem;
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
+  border-radius: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
   font-size: 0.875em;
   line-height: 1.4em;
   background: var(--sc-inline-code-background-color);
