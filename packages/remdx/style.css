@@ -196,12 +196,6 @@ pre[data-title]::before {
   top: -1.2em;
 }
 
-pre.shiki {
-  border-radius: 0.25rem;
-  padding-bottom: 0.25rem;
-  padding-left: 0.25rem;
-}
-
 pre.shiki > div > a {
   display: none;
 }
