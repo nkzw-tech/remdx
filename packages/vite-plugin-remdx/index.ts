@@ -62,17 +62,8 @@ const extractFenceLanguages = (source: string) => {
   return languages;
 };
 
-const replaceUnsupportedFenceLanguages = (
-  source: string,
-  unsupportedLanguages: ReadonlySet<string>,
-) =>
-  source.replaceAll(
-    CODE_FENCE_HEADER_REGEXP,
-    (header, language: string, metadata = '') =>
-      unsupportedLanguages.has(language.trim().toLowerCase())
-        ? `\`\`\`text${metadata}`
-        : header,
-  );
+const addTagsToTypescript = (language: string) =>
+  language === 'ts' || language === 'typescript' ? 'ts-tags' : language;
 
 type MarkdownTreeNode = {
   children?: Array<unknown>;
@@ -238,23 +229,44 @@ export default function remdx(): Plugin {
     return highlighterPromise;
   };
 
-  const loadFenceLanguages = async (source: string) => {
+  const normalizeAndLoadFenceLanguages = async (source: string) => {
     const unsupportedLanguages = new Set<string>();
     const highlighter = await getHighlighter();
 
     for (const language of extractFenceLanguages(source)) {
-      if (loadedLanguages.has(language)) {
+      const normalizedLanguage = addTagsToTypescript(language);
+
+      if (loadedLanguages.has(normalizedLanguage)) {
+        continue;
+      }
+      if (unsupportedLanguages.has(normalizedLanguage)) {
         continue;
       }
       try {
-        await highlighter.loadLanguage(language as never);
-        loadedLanguages.add(language);
+        await highlighter.loadLanguage(normalizedLanguage as never);
+        loadedLanguages.add(normalizedLanguage);
       } catch {
-        unsupportedLanguages.add(language);
+        unsupportedLanguages.add(normalizedLanguage);
       }
     }
 
-    return unsupportedLanguages;
+    return source.replaceAll(
+      CODE_FENCE_HEADER_REGEXP,
+      (header, language: string, metadata = '') => {
+        const rawLanguage = language.trim().toLowerCase();
+        const normalizedLanguage = addTagsToTypescript(rawLanguage);
+
+        if (unsupportedLanguages.has(normalizedLanguage)) {
+          return `\`\`\`text${metadata}`;
+        }
+
+        if (normalizedLanguage !== rawLanguage) {
+          return `\`\`\`${normalizedLanguage}${metadata}`;
+        }
+
+        return header;
+      },
+    );
   };
 
   return {
@@ -262,12 +274,8 @@ export default function remdx(): Plugin {
     name: 'mdx-transform',
     async transform(code: string, id: string) {
       if (id.endsWith('.re.mdx')) {
+        const normalizedCode = await normalizeAndLoadFenceLanguages(code);
         const highlighter = await getHighlighter();
-        const unsupportedLanguages = await loadFenceLanguages(code);
-        const normalizedCode =
-          unsupportedLanguages.size > 0
-            ? replaceUnsupportedFenceLanguages(code, unsupportedLanguages)
-            : code;
 
         return await transform(normalizedCode, {
           rehypePlugins: [
