@@ -195,6 +195,12 @@ pre[data-title]::before {
   top: -1.2em;
 }
 
+pre.shiki {
+  border-radius: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.25rem;
+}
+
 pre.shiki > div > a {
   display: none;
 }
@@ -255,18 +261,15 @@ pre code .line::before {
   display: inline-block;
   text-align: right;
   color: var(--sc-line-number-color);
+  padding-right: 0.125rem;
 }
 
-h1 > code,
-h2 > code,
-h3 > code,
-h4 > code,
-h5 > code,
-h6 > code,
-p code,
-li > code,
-li a > code,
-ul > code {
+code:not(:where(pre *)) {
+  border-radius: 0.25rem;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  font-size: 0.875em;
+  line-height: 1.4em;
   background: var(--sc-inline-code-background-color);
   overflow-wrap: anywhere;
   margin-top: -20px;
