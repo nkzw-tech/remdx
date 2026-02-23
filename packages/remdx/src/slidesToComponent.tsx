@@ -6,13 +6,7 @@ import Slide from './slide.tsx';
 import { Transitions as DefaultTransitions } from './transitions.tsx';
 
 export default async function slidesToComponent(module: Promise<ReMDXModule>) {
-  const {
-    Components,
-    Container,
-    default: slides,
-    Themes,
-    Transitions,
-  } = await module;
+  const { Components, Container, default: slides, Themes, Transitions } = await module;
 
   // Preload background images.
   for (const { data } of slides) {
@@ -34,9 +28,7 @@ export default async function slidesToComponent(module: Promise<ReMDXModule>) {
             key={index}
             style={Themes?.[data?.theme] || Themes?.default}
             transition={
-              Transitions?.[data?.transition] ||
-              DefaultTransitions[data?.transition] ||
-              undefined
+              Transitions?.[data?.transition] || DefaultTransitions[data?.transition] || undefined
             }
           >
             <Component />

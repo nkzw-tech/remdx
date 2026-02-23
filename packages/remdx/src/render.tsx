@@ -4,10 +4,7 @@ import slidesToComponent from './slidesToComponent.tsx';
 
 const roots = new WeakMap<HTMLElement, Root>();
 
-export default async function render(
-  element: HTMLElement | null,
-  module: Promise<ReMDXModule>,
-) {
+export default async function render(element: HTMLElement | null, module: Promise<ReMDXModule>) {
   if (!element) {
     throw new Error(`remdx: The provided DOM node could not be found.`);
   }

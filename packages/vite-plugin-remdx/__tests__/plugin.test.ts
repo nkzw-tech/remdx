@@ -4,10 +4,7 @@ import remdx from '../index.ts';
 const { transform } = remdx();
 
 test('remdx compiler', async () => {
-  const transformFn = transform as unknown as (
-    code: string,
-    id: string,
-  ) => Promise<string>;
+  const transformFn = transform as unknown as (code: string, id: string) => Promise<string>;
 
   expect(
     await transformFn(
@@ -114,10 +111,7 @@ theme: dark
 });
 
 test('shiki metadata is preserved for titles and highlighted lines', async () => {
-  const transformFn = remdx().transform as unknown as (
-    code: string,
-    id: string,
-  ) => Promise<string>;
+  const transformFn = remdx().transform as unknown as (code: string, id: string) => Promise<string>;
 
   const fence = '```';
   const output = await transformFn(

@@ -4,8 +4,6 @@ declare module '*.re.mdx' {
   export let Components: import('./types.jsx').MDXComponents | undefined;
   export let Container: import('./types.jsx').SlideContainer | undefined;
   export let Themes: import('./types.jsx').Themes | undefined;
-  export let Transitions:
-    | Record<string, import('./types.jsx').SlideTransition>
-    | undefined;
+  export let Transitions: Record<string, import('./types.jsx').SlideTransition> | undefined;
   export default slides;
 }

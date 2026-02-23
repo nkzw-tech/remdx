@@ -1,10 +1,7 @@
 export default function Image({
   src: source,
   ...props
-}: React.DetailedHTMLProps<
-  React.ImgHTMLAttributes<HTMLImageElement>,
-  HTMLImageElement
->) {
+}: React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) {
   if (!source) {
     return null;
   }

@@ -6,11 +6,7 @@ import { transformerMetaHighlight } from '@shikijs/transformers';
 import matter from 'gray-matter';
 import normalizeNewline from 'normalize-newline';
 import rehypeRaw from 'rehype-raw';
-import {
-  createHighlighter,
-  type ShikiTransformer,
-  type ThemeRegistrationResolved,
-} from 'shiki';
+import { createHighlighter, type ShikiTransformer, type ThemeRegistrationResolved } from 'shiki';
 import type { Plugin } from 'vite';
 
 type Slide = [string, Record<string, unknown>];
@@ -31,9 +27,7 @@ const parseTitle = (raw: string | undefined) => {
     return null;
   }
 
-  const match = raw.match(
-    /(?:^|\s)title=(?:"([^"]+)"|'([^']+)'|(\S+))(?:\s|$)/,
-  );
+  const match = raw.match(/(?:^|\s)title=(?:"([^"]+)"|'([^']+)'|(\S+))(?:\s|$)/);
   return match?.[1] ?? match?.[2] ?? match?.[3] ?? null;
 };
 
@@ -76,8 +70,7 @@ const visitCodeNodes = (node: MarkdownTreeNode) => {
   if (node.type === 'code' && node.meta) {
     node.data ??= {};
     node.data.meta = node.meta;
-    const hProperties =
-      (node.data.hProperties as Record<string, unknown> | undefined) ?? {};
+    const hProperties = (node.data.hProperties as Record<string, unknown> | undefined) ?? {};
     hProperties['metastring'] = node.meta;
     node.data.hProperties = hProperties;
   }
@@ -95,11 +88,7 @@ const preserveCodeBlockMetaTransformer = (tree: MarkdownTreeNode) => {
 
 const preserveCodeBlockMeta = () => preserveCodeBlockMetaTransformer;
 
-const compileMDX = async (
-  content: string,
-  options: CompileOptions,
-  development = true,
-) =>
+const compileMDX = async (content: string, options: CompileOptions, development = true) =>
   String(
     (
       await compile(content, {
@@ -121,16 +110,11 @@ const parseSlide = (text: string): Slide => {
 };
 
 export default function remdx(): Plugin {
-  let highlighterPromise: Promise<
-    Awaited<ReturnType<typeof createHighlighter>>
-  >;
+  let highlighterPromise: Promise<Awaited<ReturnType<typeof createHighlighter>>>;
   const loadedLanguages = new Set<string>();
   const isProduction = process.env.NODE_ENV === 'production';
 
-  const wrapComponent = (
-    content: string,
-    data: Record<string, unknown>,
-  ) => `(() => {
+  const wrapComponent = (content: string, data: Record<string, unknown>) => `(() => {
     function MDXContentWrapper(props) {
       ${content
         .replaceAll(EXPORT_DEFAULT_REGEXP, '')
@@ -152,11 +136,9 @@ export default function remdx(): Plugin {
         await Promise.all(
           content.map(
             ([content, data]) =>
-              compileMDX(
-                `${inlineModules.join('\n')}\n\n${content}`,
-                options,
-                !isProduction,
-              ).then((content) => [content, data]) as Promise<Slide>,
+              compileMDX(`${inlineModules.join('\n')}\n\n${content}`, options, !isProduction).then(
+                (content) => [content, data],
+              ) as Promise<Slide>,
           ),
         )
       ).map(([content, data]) => wrapComponent(content, data));
@@ -288,10 +270,7 @@ export default function remdx(): Plugin {
                   dark: 'Dunkel',
                   light: 'Licht',
                 },
-                transformers: [
-                  shikiTransformerCodeTitle(),
-                  transformerMetaHighlight(),
-                ],
+                transformers: [shikiTransformerCodeTitle(), transformerMetaHighlight()],
               },
             ],
           ],

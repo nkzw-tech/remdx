@@ -17,9 +17,7 @@ import { Transitions } from './transitions.tsx';
 export default function Slide({
   children,
   className,
-  container: Container = ({ children, style }) => (
-    <div style={style}>{children}</div>
-  ),
+  container: Container = ({ children, style }) => <div style={style}>{children}</div>,
   id,
   image,
   padding = 48,
@@ -80,15 +78,11 @@ export default function Slide({
           : [false, true];
     }
 
-    const isWrappingForward =
-      slideIndex === slideCount - 1 && activeView.slideIndex === 0;
-    const isWrappingReverse =
-      slideIndex === 0 && activeView.slideIndex === slideCount - 1;
+    const isWrappingForward = slideIndex === slideCount - 1 && activeView.slideIndex === 0;
+    const isWrappingReverse = slideIndex === 0 && activeView.slideIndex === slideCount - 1;
     const isWrapping = isWrappingForward || isWrappingReverse;
-    const isPassed =
-      (!isWrapping && slideIndex < activeView.slideIndex) || isWrappingForward;
-    const isUpcoming =
-      (!isWrapping && slideIndex > activeView.slideIndex) || isWrappingReverse;
+    const isPassed = (!isWrapping && slideIndex < activeView.slideIndex) || isWrappingForward;
+    const isUpcoming = (!isWrapping && slideIndex > activeView.slideIndex) || isWrappingReverse;
     return [isPassed, isUpcoming];
   })();
 
@@ -133,21 +127,12 @@ export default function Slide({
     if (!willExit) {
       return;
     }
-    if (
-      pendingView.slideIndex === undefined ||
-      pendingView.slideIndex > slideCount - 1
-    ) {
+    if (pendingView.slideIndex === undefined || pendingView.slideIndex > slideCount - 1) {
       cancelTransition();
     } else {
       setAnimate(navigationDirection > 0);
     }
-  }, [
-    cancelTransition,
-    pendingView,
-    navigationDirection,
-    willExit,
-    slideCount,
-  ]);
+  }, [cancelTransition, pendingView, navigationDirection, willExit, slideCount]);
 
   useEffect(() => {
     if (!willEnter) {
@@ -164,13 +149,7 @@ export default function Slide({
       setAnimate(isSingleForwardStep);
       commitTransition();
     }
-  }, [
-    activeView,
-    commitTransition,
-    navigationDirection,
-    pendingView,
-    willEnter,
-  ]);
+  }, [activeView, commitTransition, navigationDirection, pendingView, willEnter]);
 
   const target = useMemo(() => {
     if (isPassed) {

@@ -1,8 +1,8 @@
 :root {
   --font-size: 36px;
   --font-mono:
-    'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    'Liberation Mono', 'Courier New', monospace;
+    'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
   --text-color: #000;
   --background-color: #fff;
 

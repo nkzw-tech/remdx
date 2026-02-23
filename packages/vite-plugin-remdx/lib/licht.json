@@ -116,11 +116,7 @@
     },
     {
       "name": "Classes",
-      "scope": [
-        "entity.name.type",
-        "entity.other.inherited-class",
-        "support.class"
-      ],
+      "scope": ["entity.name.type", "entity.other.inherited-class", "support.class"],
       "settings": {
         "foreground": "#bb28c7"
       }
@@ -262,10 +258,7 @@
     },
     {
       "name": "HTML: Attribute Values",
-      "scope": [
-        "meta.tag string.quoted",
-        "meta.tag string.quoted constant.character.entity"
-      ],
+      "scope": ["meta.tag string.quoted", "meta.tag string.quoted constant.character.entity"],
       "settings": {
         "background": "#ffffff",
         "foreground": "#00a33f"

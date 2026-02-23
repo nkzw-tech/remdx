@@ -1,11 +1,4 @@
-import {
-  createContext,
-  CSSProperties,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-} from 'react';
+import { createContext, CSSProperties, ReactNode, useCallback, useEffect, useMemo } from 'react';
 import { SwipeEventData } from 'react-swipeable';
 import { SlideTransition } from '../types.tsx';
 import useAspectRatioFitting from './hooks/use-aspect-ratio-fitting.tsx';

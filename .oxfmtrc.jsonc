@@ -1,0 +1,20 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "singleQuote": true,
+  "experimentalSortImports": { "newlinesBetween": false },
+  "experimentalSortPackageJson": { "sortScripts": true },
+  "ignorePatterns": [
+    ".eslintcache",
+    "coverage/",
+    "dist/",
+    "node_modules/",
+    "packages/create-remdx/index.mjs",
+    "packages/remdx/index.d.ts",
+    "packages/remdx/index.js",
+    "packages/vite-plugin-remdx/index.d.ts",
+    "packages/vite-plugin-remdx/index.mjs",
+    "pnpm-lock.yaml",
+    "tsconfig.tsbuildinfo",
+    "vite.config.ts.timestamp-*",
+  ],
+}

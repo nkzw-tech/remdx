@@ -66,9 +66,7 @@ async function create() {
     write(file);
   }
 
-  const pkg = JSON.parse(
-    readFileSync(path.join(templateDir, 'package.json'), 'utf8'),
-  );
+  const pkg = JSON.parse(readFileSync(path.join(templateDir, 'package.json'), 'utf8'));
 
   pkg.name = packageName;
 
@@ -113,12 +111,8 @@ async function create() {
       console.log(blue(`  cd ${bold(related)}`));
     }
 
-    console.log(
-      blue(`  ${pkgManager === 'yarn' ? 'yarn' : `${pkgManager} install`}`),
-    );
-    console.log(
-      blue(`  ${pkgManager === 'yarn' ? 'yarn dev' : `${pkgManager} run dev`}`),
-    );
+    console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn' : `${pkgManager} install`}`));
+    console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn dev' : `${pkgManager} run dev`}`));
   }
 }
 
@@ -133,8 +127,7 @@ const copy = (src: string, dest: string) => {
 
 const getValidPackageName = async (projectName: string) => {
   projectName = path.basename(projectName);
-  const packageNameRegExp =
-    /^(?:@[\d*a-z~-][\d*._a-z~-]*\/)?[\da-z~-][\d._a-z~-]*$/;
+  const packageNameRegExp = /^(?:@[\d*a-z~-][\d*._a-z~-]*\/)?[\da-z~-][\d._a-z~-]*$/;
   if (packageNameRegExp.test(projectName)) {
     return projectName;
   } else {
@@ -150,8 +143,7 @@ const getValidPackageName = async (projectName: string) => {
       message: 'Package name:',
       name: 'inputPackageName',
       type: 'text',
-      validate: (input) =>
-        packageNameRegExp.test(input) ? true : 'Invalid package.json name',
+      validate: (input) => (packageNameRegExp.test(input) ? true : 'Invalid package.json name'),
     });
     return inputPackageName;
   }

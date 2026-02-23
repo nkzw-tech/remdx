@@ -2,15 +2,15 @@
   "name": "create-remdx",
   "version": "19.0.0",
   "description": "Beautiful Minimalist React & MDX Presentations",
+  "author": "Christoph Nakazawa <christoph.pojer@gmail.com>",
   "repository": {
     "type": "git",
     "url": "git://github.com/cpojer/remdx.git"
   },
-  "author": "Christoph Nakazawa <christoph.pojer@gmail.com>",
-  "type": "module",
   "bin": {
     "create-remdx": "index.mjs"
   },
+  "type": "module",
   "scripts": {
     "build": "rm -f index.mjs; tsdown index.tsx --outDir=./ --clean=false --target=node22 --format=esm"
   },
