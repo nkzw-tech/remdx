@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* oxlint-disable eslint/no-console */
+
 // Copied and modified from https://github.com/slidevjs/slidev/blob/main/packages/create-app/index.js
 // MIT License – Copyright (c) 2020-2021 Anthony Fu
 import fs, { readFileSync } from 'node:fs';
