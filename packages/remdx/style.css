@@ -1,5 +1,8 @@
 :root {
   --font-size: 36px;
+  --font-mono:
+    'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
   --text-color: #000;
   --background-color: #fff;
 
@@ -174,8 +177,9 @@ pre.shiki {
   background-color: var(--sc-background-color);
   color: var(--sc-text-color);
   position: relative;
-  padding-right: 12px;
-  font-family: 'Fira Code', monospace;
+  border-radius: 4px;
+  padding: 0 12px 4px 2px;
+  font-family: var(--font-mono);
 }
 
 pre[data-title] {
@@ -206,7 +210,7 @@ pre.shiki .language-id {
 pre.shiki .code-title {
   background-color: var(--sc-background-color);
   color: var(--sc-comments-fg);
-  font-family: 'Fira Code', monospace;
+  font-family: var(--font-mono);
   display: inline-block;
   margin-bottom: 4px;
   margin-left: 46px;
@@ -243,7 +247,7 @@ pre.shiki code {
 pre code {
   counter-increment: step 0;
   counter-reset: step;
-  font-family: 'Fira Code', monospace;
+  font-family: var(--font-mono);
   white-space: pre;
 }
 
@@ -255,18 +259,15 @@ pre code .line::before {
   display: inline-block;
   text-align: right;
   color: var(--sc-line-number-color);
+  padding-right: 2px;
 }
 
-h1 > code,
-h2 > code,
-h3 > code,
-h4 > code,
-h5 > code,
-h6 > code,
-p code,
-li > code,
-li a > code,
-ul > code {
+code:not(:where(pre *)) {
+  border-radius: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
+  font-size: 0.875em;
+  line-height: 1.4em;
   background: var(--sc-inline-code-background-color);
   overflow-wrap: anywhere;
   margin-top: -20px;
