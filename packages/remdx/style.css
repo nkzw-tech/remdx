@@ -88,7 +88,7 @@
     --sc-background-color-light: rgb(73, 128, 209, 0.1);
     --sc-background-color: rgb(20, 20, 20);
     --sc-background-color-layer: rgb(38 38 38);
-    --sc-inline-code-background-color: rgb(39, 39, 39);
+    --sc-inline-code-background-color: rgb(32, 32, 32);
     --sc-line-highlight-color: #c2e8ff35;
     --sc-line-number-color: #adadad;
     --sc-link-color: rgb(94 159 255);
@@ -257,6 +257,12 @@ pre code .line::before {
   color: var(--sc-line-number-color);
 }
 
+h1 > code,
+h2 > code,
+h3 > code,
+h4 > code,
+h5 > code,
+h6 > code,
 p code,
 li > code,
 li a > code,
