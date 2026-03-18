@@ -11,7 +11,7 @@
   "main": "index.mjs",
   "module": "./index.mjs",
   "scripts": {
-    "build": "rm -f index.mjs; tsdown index.ts --outDir=./ --clean=false --target=node22 --format=esm -dts"
+    "build": "vp pack"
   },
   "dependencies": {
     "@mdx-js/mdx": "^3.1.1",
@@ -23,6 +23,7 @@
     "shiki": "^4.0.2"
   },
   "devDependencies": {
-    "vite": "^8.0.0"
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
   }
 }

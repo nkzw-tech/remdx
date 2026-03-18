@@ -12,12 +12,9 @@ Create beautiful minimalist presentations with React & MDX.
 
 ```bash
 npm init remdx
-```
-
-And:
-
-```bash
-npm run dev
+curl -fsSL https://vite.plus | bash
+vp install
+vp dev
 ```
 
 ### Custom Setup
@@ -25,15 +22,15 @@ npm run dev
 See the [Example Deck](examples/tokyo) to get started with adding ReMDX to your project:
 
 ```bash
-npm add @nkzw/remdx @nkzw/vite-plugin-remdx
+vp add @nkzw/remdx @nkzw/vite-plugin-remdx
 ```
 
-`vite.config.js`:
+`vite.config.ts`:
 
 ```js
+import { defineConfig } from 'vite-plus';
 import remdx from '@nkzw/vite-plugin-remdx';
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [remdx(), react()],
@@ -52,7 +49,7 @@ export default defineConfig({
 </script>
 ```
 
-Then create your `slides.re.mdx` and start the dev server via `npx run vite dev`.
+Then create your `slides.re.mdx` and start the dev server via `vp dev`.
 
 ## Usage
 
@@ -78,7 +75,7 @@ The core of ReMDX is a lean fork of Spectacle. `create-remdx` is based on Slidev
 
 ### Why ReMDX?
 
-All three of the above solutions fall short in some way. Some are a bit outdated, and some have too much cruft or are slow. Slidev is modern but only works with Vue instead of React. I wanted to build a fast MDX-based slide deck tool on top of Vite that uses React and only supports a minimal set of features.
+All three of the above solutions fall short in some way. Some are a bit outdated, and some have too much cruft or are slow. Slidev is modern but only works with Vue instead of React. I wanted to build a fast MDX-based slide deck tool on top of Vite+ that uses React and only supports a minimal set of features.
 
 ### ReMDX does not have feature XYZ!
 

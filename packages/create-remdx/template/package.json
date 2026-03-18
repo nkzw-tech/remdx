@@ -3,8 +3,9 @@
   "version": "19.1.0",
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "dev": "vite dev"
+    "build": "vp build",
+    "dev": "vp dev",
+    "prepare": "vp config"
   },
   "dependencies": {
     "@nkzw/remdx": "*",
@@ -15,7 +16,8 @@
     "@nkzw/vite-plugin-remdx": "*",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
-    "@vitejs/plugin-react": "^4.6.0",
-    "vite": "^7.0.0"
+    "@vitejs/plugin-react": "^6.0.1",
+    "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+    "vite-plus": "latest"
   }
 }

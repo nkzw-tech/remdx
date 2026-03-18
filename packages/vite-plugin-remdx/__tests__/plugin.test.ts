@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest';
+import { expect, test } from 'vite-plus/test';
 import remdx from '../index.ts';
 
 const { transform } = remdx();

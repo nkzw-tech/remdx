@@ -11,7 +11,7 @@
   "main": "./index.js",
   "types": "./index.d.ts",
   "scripts": {
-    "build": "rm -f index.js; tsdown index.tsx --outDir=./ --clean=false --target=es2022 --platform=browser --format=esm -dts"
+    "build": "vp pack"
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.1"
@@ -27,7 +27,8 @@
     "react-dom": "^19.2.4",
     "react-spring": "^10.0.3",
     "react-swipeable": "^7.0.2",
-    "use-resize-observer": "^9.1.0"
+    "use-resize-observer": "^9.1.0",
+    "vite-plus": "catalog:"
   },
   "peerDependencies": {
     "react": "^19.1.0",

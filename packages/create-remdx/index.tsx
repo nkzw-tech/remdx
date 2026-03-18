@@ -14,6 +14,33 @@ import prompts from 'prompts';
 const argv = minimist(process.argv.slice(2));
 const cwd = process.cwd();
 
+const getPackageManager = () => {
+  const userAgent = process.env.npm_config_user_agent ?? '';
+  const match = userAgent.match(/^(npm|pnpm|yarn)\/([^\s]+)/);
+  return match ? `${match[1]}@${match[2]}` : null;
+};
+
+const hasVitePlus = async () => {
+  try {
+    await execa('vp', ['--version']);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const printNextSteps = (root: string, related: string) => {
+  console.log(dim('\n  install Vite+ if you have not already:\n'));
+  console.log(blue(`  ${bold('curl -fsSL https://vite.plus | bash')}`));
+  console.log(dim('\n  then start it by:\n'));
+  if (root !== cwd) {
+    console.log(blue(`  cd ${bold(related)}`));
+  }
+
+  console.log(blue(`  ${bold('vp install')}`));
+  console.log(blue(`  ${bold('vp dev')}`));
+};
+
 async function create() {
   console.log(`\n${bold('  ReMDX')}\n`);
 
@@ -71,16 +98,12 @@ async function create() {
   const pkg = JSON.parse(readFileSync(path.join(templateDir, 'package.json'), 'utf8'));
 
   pkg.name = packageName;
+  const packageManager = getPackageManager();
+  if (packageManager) {
+    pkg.packageManager = packageManager;
+  }
 
   write('package.json', JSON.stringify(pkg, null, 2));
-
-  const pkgManager =
-    /pnpm/.test(process.env.npm_execpath || '') ||
-    /pnpm/.test(process.env.npm_config_user_agent || '')
-      ? 'pnpm'
-      : /yarn/.test(process.env.npm_execpath || '')
-        ? 'yarn'
-        : 'npm';
 
   const related = path.relative(cwd, root);
 
@@ -94,27 +117,16 @@ async function create() {
   });
 
   if (yes) {
-    const { agent } = await prompts({
-      choices: ['npm', 'yarn', 'pnpm'].map((i) => ({ title: i, value: i })),
-      message: 'Choose your package manager',
-      name: 'agent',
-      type: 'select',
-    });
-
-    if (!agent) {
+    if (!(await hasVitePlus())) {
+      console.log(yellow('  Vite+ is not installed yet.'));
+      printNextSteps(root, related);
       return;
     }
 
-    await execa(agent, ['install'], { cwd: root, stdio: 'inherit' });
-    await execa(agent, ['run', 'dev'], { cwd: root, stdio: 'inherit' });
+    await execa('vp', ['install'], { cwd: root, stdio: 'inherit' });
+    await execa('vp', ['dev'], { cwd: root, stdio: 'inherit' });
   } else {
-    console.log(dim('\n  start it later by:\n'));
-    if (root !== cwd) {
-      console.log(blue(`  cd ${bold(related)}`));
-    }
-
-    console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn' : `${pkgManager} install`}`));
-    console.log(blue(`  ${pkgManager === 'yarn' ? 'yarn dev' : `${pkgManager} run dev`}`));
+    printNextSteps(root, related);
   }
 }
 
