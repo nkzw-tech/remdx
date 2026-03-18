@@ -1,6 +1,6 @@
 {
   "name": "remdx-template",
-  "version": "19.1.0",
+  "version": "20.0.0",
   "type": "module",
   "scripts": {
     "build": "vp build",
