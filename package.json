@@ -1,6 +1,6 @@
 {
   "name": "@nkzw/remdx-private",
-  "version": "19.1.0",
+  "version": "20.0.0",
   "private": true,
   "author": "Christoph Nakazawa <christoph.pojer@gmail.com>",
   "repository": {
@@ -12,27 +12,25 @@
     "build": "vp run create-remdx#build && vp run @nkzw/remdx#build && vp run @nkzw/vite-plugin-remdx#build",
     "dev": "cd examples/tokyo && vp dev",
     "dev:setup": "vp install",
-    "dev:update-deps": "rm -rf pnpm-lock.yaml node_modules/ **/node_modules && vp install",
     "prepare": "vp config"
   },
   "devDependencies": {
     "@nkzw/eslint-plugin": "^2.0.0",
-    "@nkzw/oxlint-config": "^1.0.1",
+    "@nkzw/oxlint-config": "^1.2.1",
     "@styled/typescript-styled-plugin": "^1.0.1",
-    "@types/node": "^25.5.0",
-    "eslint": "^10.0.3",
-    "eslint-plugin-no-only-tests": "^3.3.0",
-    "eslint-plugin-perfectionist": "^5.7.0",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-unused-imports": "^4.4.1",
-    "typescript": "^5.9.3",
+    "@types/node": "^25.6.0",
+    "eslint": "^10.3.0",
+    "eslint-plugin-no-only-tests": "^3.4.0",
+    "eslint-plugin-perfectionist": "^5.9.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "typescript": "^6.0.3",
     "vite": "catalog:",
     "vite-plus": "catalog:",
     "vitest": "catalog:"
   },
   "engines": {
     "node": ">=24.0.0",
-    "pnpm": ">=10.30.1"
+    "pnpm": ">=11.0.0"
   },
-  "packageManager": "pnpm@10.32.1"
+  "packageManager": "pnpm@11.0.6"
 }

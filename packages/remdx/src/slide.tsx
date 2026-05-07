@@ -14,10 +14,14 @@ import { DeckContext } from './deck.tsx';
 import { GOTO_FINAL_STEP } from './hooks/use-deck-state.tsx';
 import { Transitions } from './transitions.tsx';
 
+const FallbackContainer = ({ children, style }: { children: ReactNode; style?: CSSProperties }) => (
+  <div style={style}>{children}</div>
+);
+
 export default function Slide({
   children,
   className,
-  container: Container = ({ children, style }) => <div style={style}>{children}</div>,
+  container: Container = FallbackContainer,
   id,
   image,
   padding = 48,
@@ -98,6 +102,7 @@ export default function Slide({
     }
 
     if (pendingView.stepIndex < 0) {
+      // oxlint-disable-next-line react-hooks-js/set-state-in-effect
       setAnimate(false);
       regressSlide();
     } else if (pendingView.stepIndex > 0) {
@@ -130,6 +135,7 @@ export default function Slide({
     if (pendingView.slideIndex === undefined || pendingView.slideIndex > slideCount - 1) {
       cancelTransition();
     } else {
+      // oxlint-disable-next-line react-hooks-js/set-state-in-effect
       setAnimate(navigationDirection > 0);
     }
   }, [cancelTransition, pendingView, navigationDirection, willExit, slideCount]);
@@ -140,6 +146,7 @@ export default function Slide({
     }
 
     if (pendingView.stepIndex === GOTO_FINAL_STEP) {
+      // oxlint-disable-next-line react-hooks-js/set-state-in-effect
       setAnimate(false);
       commitTransition({
         stepIndex: 0,
