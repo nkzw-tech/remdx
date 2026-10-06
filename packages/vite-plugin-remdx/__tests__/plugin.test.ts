@@ -133,9 +133,13 @@ test('shiki metadata is preserved for titles and highlighted lines', async () =>
   expect(output).toContain('--shiki-dark');
 });
 
-test.each(['json', 'ts', 'typescript', 'unsupported-language'])(
+test.each(
+  ['json', 'ts', 'typescript', 'unsupported-language'].flatMap((language) =>
+    ['  ', '\t'].map((indentation) => [language, indentation]),
+  ),
+)(
   'indented %s fences are highlighted without changing code indentation or metadata',
-  async (language) => {
+  async (language, indentation) => {
     const transformFn = remdx().transform as unknown as (
       code: string,
       id: string,
@@ -144,11 +148,11 @@ test.each(['json', 'ts', 'typescript', 'unsupported-language'])(
     const output = await transformFn(
       [
         '<div>',
-        `  ${fence}${language} title="demo" {2}`,
-        '  {',
-        '    "enabled": true',
-        '  }',
-        `  ${fence}`,
+        `${indentation}${fence}${language} title="demo" {2}`,
+        `${indentation}{`,
+        `${indentation}  "enabled": true`,
+        `${indentation}}`,
+        `${indentation}${fence}`,
         '</div>',
         '',
         '---',
@@ -165,3 +169,17 @@ test.each(['json', 'ts', 'typescript', 'unsupported-language'])(
     expect(output).not.toContain('children: "    ');
   },
 );
+
+test('slide separators inside indented fences stay in the code block', async () => {
+  const transformFn = remdx().transform as unknown as (code: string, id: string) => Promise<string>;
+  const fence = '```';
+  const output = await transformFn(
+    ['<div>', `  ${fence}text`, '---', `  ${fence}`, '</div>', '', '---', '', 'Second slide'].join(
+      '\n',
+    ),
+    'slides.re.mdx',
+  );
+
+  expect(output.match(/MDXContentWrapper\.isMDXComponent/g)).toHaveLength(2);
+  expect(output).toContain('children: "---"');
+});

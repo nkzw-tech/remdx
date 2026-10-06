@@ -177,9 +177,9 @@ export default function remdx(): Plugin {
             }
           }
         }
-      } else if (line.startsWith('```')) {
+      } else if (line.trimStart().startsWith('```')) {
         for (i += 1; i < lines.length; i++) {
-          if (lines[i].startsWith('```')) {
+          if (lines[i].trimStart().startsWith('```')) {
             break;
           }
         }
