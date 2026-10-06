@@ -6,7 +6,7 @@ export default function useAspectRatioFitting(aspectRatio: number) {
   const targetHeight = targetWidth / aspectRatio;
   const containerRef = useRef<HTMLDivElement>(null);
   const [scaleFactor, setScaleFactor] = useState(1);
-  const [transformOrigin, setTransformOrigin] = useState({ x: 0, y: 0 });
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   const recalculate = useCallback(
     ({ height, width }: ObservedSize) => {
@@ -24,20 +24,11 @@ export default function useAspectRatioFitting(aspectRatio: number) {
       const scaledWidth = targetWidth * scaleFactor;
       const scaledHeight = targetHeight * scaleFactor;
 
-      let x0 = 0;
-      if (useVertical) {
-        x0 = 0.5 * (containerWidth - scaledWidth);
-        x0 /= 1 - scaleFactor;
-      }
-
-      let y0 = 0;
-      if (!useVertical) {
-        y0 = 0.5 * (containerHeight - scaledHeight);
-        y0 /= 1 - scaleFactor;
-      }
-
       setScaleFactor(scaleFactor);
-      setTransformOrigin({ x: x0, y: y0 });
+      setOffset({
+        x: 0.5 * (containerWidth - scaledWidth),
+        y: 0.5 * (containerHeight - scaledHeight),
+      });
     },
     [targetWidth, targetHeight],
   );
@@ -63,8 +54,8 @@ export default function useAspectRatioFitting(aspectRatio: number) {
       height: targetHeight,
       overflow: 'hidden',
       position: 'relative',
-      transform: `scale(${scaleFactor})`,
-      transformOrigin: `${transformOrigin.x}px ${transformOrigin.y}px`,
+      transform: `translate(${offset.x}px, ${offset.y}px) scale(${scaleFactor})`,
+      transformOrigin: '0 0',
       width: targetWidth,
     },
   ] as const;

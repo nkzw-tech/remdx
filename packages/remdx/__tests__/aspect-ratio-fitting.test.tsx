@@ -55,6 +55,21 @@ test('a hidden deck waits for a measurable size and fits when it becomes visible
     }),
   );
   const style = JSON.parse(container.querySelector('output')!.textContent!);
-  expect(style.transform).toBe('scale(0.5)');
+  expect(style.transform).toContain('scale(0.5)');
   expect(style.transformOrigin).not.toMatch(/NaN|Infinity/);
+});
+
+test.each([
+  [1366, 900, 'translate(0px, 65.8125px) scale(1)'],
+  [1600, 768.375, 'translate(117px, 0px) scale(1)'],
+  [1366, 768.375, 'translate(0px, 0px) scale(1)'],
+  [683, 900, 'translate(0px, 257.90625px) scale(0.5)'],
+])('centers a deck in a %s × %s viewport', async (width, height, transform) => {
+  vi.spyOn(HTMLElement.prototype, 'getClientRects').mockReturnValue([
+    new DOMRect(0, 0, width, height),
+  ] as unknown as DOMRectList);
+  await act(() => root.render(<Layout />));
+  const style = JSON.parse(container.querySelector('output')!.textContent!);
+  expect(style.transform).toBe(transform);
+  expect(style.transformOrigin).toBe('0 0');
 });
