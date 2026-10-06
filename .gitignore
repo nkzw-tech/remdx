@@ -9,3 +9,4 @@ packages/remdx/index.js
 packages/vite-plugin-remdx/index.mjs
 tsconfig.tsbuildinfo
 vite.config.ts.timestamp-*
+.vitest/

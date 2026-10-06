@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { act, type ComponentProps } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { afterEach, beforeEach, expect, test, vi } from 'vitest';
+import { afterEach, beforeEach, expect, test, vi } from 'vite-plus/test';
 import { DeckContext } from '../src/deck.tsx';
 import { deckReducer, type DeckState } from '../src/hooks/use-deck-state.tsx';
 import useSlideTransition from '../src/hooks/use-slide-transition.tsx';

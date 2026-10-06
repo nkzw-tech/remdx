@@ -18,13 +18,13 @@
   },
   "devDependencies": {
     "@types/mousetrap": "^1.6.15",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "@types/styled-components": "^5.1.36",
     "history": "^5.3.0",
     "mousetrap": "^1.6.5",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "react-swipeable": "^7.0.2",
     "use-resize-observer": "^10.0.0",
     "vite-plus": "catalog:"
