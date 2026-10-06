@@ -97,6 +97,9 @@ export default function Deck({
   );
 
   const [syncLocation, onActiveStateChange] = useLocationSync({
+    // Slides currently have no built-in reveal steps. Normalize old step links
+    // before committing them so navigation always starts from a valid state.
+    maxStepIndex: 0,
     setState: skipTo,
     slideCount: slides.length,
   });

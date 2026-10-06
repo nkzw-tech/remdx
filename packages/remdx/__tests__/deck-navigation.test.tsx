@@ -94,3 +94,33 @@ test('out-of-range links reached through history also select a valid slide', asy
   expect(activeSlide().querySelector('p')?.textContent).toBe('Third');
   expect(window.location.pathname).toBe('/slide-3');
 });
+
+test.each(['/slide-2/step-2', '/slide-2/step-final', '/?slideIndex=1&stepIndex=2'])(
+  'unsupported steps in %s normalize before Back navigates',
+  async (path) => {
+    await mount(path);
+    expect(window.location.pathname).toBe('/slide-2');
+    expect(JSON.parse(activeSlide().querySelector('output')!.textContent!)).toMatchObject({
+      slideIndex: 1,
+      stepIndex: 0,
+    });
+    await navigate('back');
+    expect(activeSlide().querySelector('p')?.textContent).toBe('First');
+    expect(window.location.pathname).toBe('/slide-1');
+    expect(JSON.parse(activeSlide().querySelector('output')!.textContent!)).toMatchObject({
+      direction: -1,
+    });
+  },
+);
+
+test('step links reached through history normalize before forward navigation', async () => {
+  await mount('/slide-1');
+  await act(() => {
+    window.history.replaceState(window.history.state, '', '/slide-2/step-2');
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  });
+  expect(window.location.pathname).toBe('/slide-2');
+  await navigate('next');
+  expect(activeSlide().querySelector('p')?.textContent).toBe('Third');
+  expect(window.location.pathname).toBe('/slide-3');
+});

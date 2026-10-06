@@ -75,12 +75,14 @@ export function mapStateToLocation(state: SlideState, basePath = '') {
 
 type LocationStateOptions = {
   historyFactory?: typeof createBrowserHistory;
+  maxStepIndex?: number;
   setState(state: DeckView): void;
   slideCount?: number;
 };
 
 export default function useLocationSync({
   historyFactory = createBrowserHistory,
+  maxStepIndex = Infinity,
   setState,
   slideCount = Infinity,
 }: LocationStateOptions) {
@@ -91,8 +93,14 @@ export default function useLocationSync({
     (state: DeckView): DeckView => ({
       ...state,
       slideIndex: Math.min(state.slideIndex, Math.max(0, slideCount - 1)),
+      stepIndex:
+        state.stepIndex === GOTO_FINAL_STEP
+          ? maxStepIndex === Infinity
+            ? GOTO_FINAL_STEP
+            : maxStepIndex
+          : Math.min(state.stepIndex, maxStepIndex),
     }),
-    [slideCount],
+    [maxStepIndex, slideCount],
   );
 
   useEffect(() => {

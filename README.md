@@ -63,9 +63,9 @@ Then create your `slides.re.mdx` and start the dev server via `vp dev`.
 
 ### Slide URLs
 
-Slides use paths such as `/slide-1` and `/slide-8`; slide numbers start at one. Revealed steps use `/slide-8/step-2`, with the initial step omitted. `/slide-8/step-final` selects the slide's final step. ReMDX keeps these paths in sync with navigation and browser back/forward. Opening the deck root selects the first slide.
+Slides use paths such as `/slide-1` and `/slide-8`; slide numbers start at one. ReMDX keeps these paths in sync with navigation and browser back/forward. Opening the deck root selects the first slide; links beyond the deck's length select the last slide.
 
-Old `?slideIndex=7&stepIndex=2` links still open and are replaced with `/slide-8/step-2` without adding a history entry. Decks hosted in a subdirectory keep their prefix, for example `/talk/slide-8`. Configure your host to serve the deck's `index.html` for slide paths so direct links and reloads work; Vite's SPA dev server handles this automatically.
+Old query and step links such as `?slideIndex=7&stepIndex=2` and `/slide-8/step-final` still open and are replaced with `/slide-8` without adding a history entry. Slides currently have no built-in reveal steps, so unsupported step positions normalize to zero before navigation. Decks hosted in a subdirectory keep their prefix, for example `/talk/slide-8`. Configure your host to serve the deck's `index.html` for slide paths so direct links and reloads work; Vite's SPA dev server handles this automatically.
 
 ### Directional slide animations
 
