@@ -46,8 +46,10 @@ export default function useAspectRatioFitting(aspectRatio: number) {
     if (!containerRef || !containerRef.current) {
       return;
     }
-    const rects = containerRef.current.getClientRects();
-    recalculate(rects[0]);
+    const rect = containerRef.current.getClientRects()[0];
+    if (rect) {
+      recalculate(rect);
+    }
   }, [targetWidth, targetHeight, recalculate]);
 
   useResizeObserver({
