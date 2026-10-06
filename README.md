@@ -151,6 +151,16 @@ The outgoing slide stays visible until its animation finishes. Incoming slides w
 
 This replaces the React Spring transition API. Move the old `from` and `enter` styles into `enter.keyframes`, and the departure styles into `leave.keyframes`. Directional keyframes belong under `keyframes.forward` and `keyframes.back`; timing belongs under each phase's `options`. The earlier nested `animation` wrapper is no longer used.
 
+## Releasing
+
+After updating the package versions and committing your changes on `main`, run:
+
+```bash
+vp run ship
+```
+
+This builds the three packages, runs formatting, lint, type checks, and tests, then publishes the public workspace packages to npm. The private root and example packages are skipped. Any build or check failure stops the release before publishing.
+
 ## Context & Decisions
 
 ### Prior Art

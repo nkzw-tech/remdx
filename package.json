@@ -12,7 +12,8 @@
     "build": "vp run create-remdx#build && vp run @nkzw/remdx#build && vp run @nkzw/vite-plugin-remdx#build",
     "dev": "cd examples/tokyo && vp dev",
     "dev:setup": "vp install",
-    "prepare": "vp config"
+    "prepare": "vp config",
+    "ship": "vp run build && vp check && vp test && vp pm publish -r --access public"
   },
   "devDependencies": {
     "@nkzw/eslint-plugin": "^2.0.0",
