@@ -13,7 +13,7 @@ type Slide = [string, Record<string, unknown>];
 
 const EXPORT_DEFAULT_REGEXP = /export\sdefault\s/g;
 const MODULE_REGEXP = /\\`|`(?:\\`|[^`])*`|(^(?:import|export)[^;]+;)/gm;
-const CODE_FENCE_HEADER_REGEXP = /^```([^\s`{]+)([^\n]*)$/gm;
+const CODE_FENCE_HEADER_REGEXP = /^([ \t]*)```([^\s`{]+)([^\n]*)$/gm;
 
 const Licht = JSON.parse(
   readFileSync(join(import.meta.dirname, './lib/licht.json'), 'utf8'),
@@ -48,7 +48,7 @@ const shikiTransformerCodeTitle = (): ShikiTransformer => ({
 const extractFenceLanguages = (source: string) => {
   const languages = new Set<string>();
   for (const match of source.matchAll(CODE_FENCE_HEADER_REGEXP)) {
-    const language = match[1]?.trim().toLowerCase();
+    const language = match[2]?.trim().toLowerCase();
     if (language) {
       languages.add(language);
     }
@@ -234,16 +234,16 @@ export default function remdx(): Plugin {
 
     return source.replaceAll(
       CODE_FENCE_HEADER_REGEXP,
-      (header, language: string, metadata = '') => {
+      (header, indentation: string, language: string, metadata = '') => {
         const rawLanguage = language.trim().toLowerCase();
         const normalizedLanguage = addTagsToTypescript(rawLanguage);
 
         if (unsupportedLanguages.has(normalizedLanguage)) {
-          return `\`\`\`text${metadata}`;
+          return `${indentation}\`\`\`text${metadata}`;
         }
 
         if (normalizedLanguage !== rawLanguage) {
-          return `\`\`\`${normalizedLanguage}${metadata}`;
+          return `${indentation}\`\`\`${normalizedLanguage}${metadata}`;
         }
 
         return header;

@@ -132,3 +132,36 @@ test('shiki metadata is preserved for titles and highlighted lines', async () =>
   expect(output).toContain('className: "shiki shiki-themes Licht Dunkel"');
   expect(output).toContain('--shiki-dark');
 });
+
+test.each(['json', 'ts', 'typescript', 'unsupported-language'])(
+  'indented %s fences are highlighted without changing code indentation or metadata',
+  async (language) => {
+    const transformFn = remdx().transform as unknown as (
+      code: string,
+      id: string,
+    ) => Promise<string>;
+    const fence = '```';
+    const output = await transformFn(
+      [
+        '<div>',
+        `  ${fence}${language} title="demo" {2}`,
+        '  {',
+        '    "enabled": true',
+        '  }',
+        `  ${fence}`,
+        '</div>',
+        '',
+        '---',
+        '',
+        'Second slide',
+      ].join('\n'),
+      'slides.re.mdx',
+    );
+
+    expect(output).toContain('className: "shiki shiki-themes Licht Dunkel"');
+    expect(output).toContain('"data-title": "demo"');
+    expect(output).toContain('className: "line highlighted"');
+    expect(output.match(/MDXContentWrapper\.isMDXComponent/g)).toHaveLength(2);
+    expect(output).not.toContain('children: "    ');
+  },
+);
