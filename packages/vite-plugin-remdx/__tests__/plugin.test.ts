@@ -145,13 +145,15 @@ test.each(
       id: string,
     ) => Promise<string>;
     const fence = '```';
+    const code =
+      language === 'ts' || language === 'typescript'
+        ? ['const enabled: boolean = true;', 'const query = sql`SELECT ${1} AS id`;']
+        : ['{', '  "enabled": true', '}'];
     const output = await transformFn(
       [
         '<div>',
         `${indentation}${fence}${language} title="demo" {2}`,
-        `${indentation}{`,
-        `${indentation}  "enabled": true`,
-        `${indentation}}`,
+        ...code.map((line) => `${indentation}${line}`),
         `${indentation}${fence}`,
         '</div>',
         '',
@@ -167,6 +169,14 @@ test.each(
     expect(output).toContain('className: "line highlighted"');
     expect(output.match(/MDXContentWrapper\.isMDXComponent/g)).toHaveLength(2);
     expect(output).not.toContain('children: "    ');
+    if (language === 'json') {
+      expect(output).toContain('children: "true"');
+    } else if (language === 'unsupported-language') {
+      expect(output).toContain(String.raw`children: "  \"enabled\": true"`);
+    } else {
+      expect(output).toContain('children: "SELECT"');
+      expect(output).toContain('children: "AS"');
+    }
   },
 );
 
