@@ -215,3 +215,23 @@ test.each(['````', '~~~'])(
     expect(output).not.toContain('ts-tags');
   },
 );
+
+test('frontmatter scalar is preserved', async () => {
+  const transform = remdx().transform as unknown as (code: string, id: string) => Promise<string>;
+  const output = await transform(
+    [
+      '# First',
+      '',
+      '---',
+      'example: |',
+      '  ```typescript',
+      '  const x = 1;',
+      '  ```',
+      '---',
+      '',
+      '# Slide',
+    ].join('\n'),
+    'slides.re.mdx',
+  );
+  expect(output).toContain('"example":"```typescript\\nconst x = 1;\\n```\\n"');
+});
