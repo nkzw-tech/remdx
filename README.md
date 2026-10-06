@@ -68,6 +68,50 @@ Slides use paths such as `/slide-1` and `/slide-8`; slide numbers start at one. 
 
 Old query and step links such as `?slideIndex=7&stepIndex=2` and `/slide-8/step-final` still open and are replaced with `/slide-8` without adding a history entry. Slides currently have no built-in reveal steps, so unsupported step positions normalize to zero before navigation. Decks hosted in a subdirectory keep their prefix, for example `/talk/slide-8`. Configure your host to serve the deck's `index.html` for slide paths so direct links and reloads work; Vite's SPA dev server handles this automatically.
 
+### Presentation controls
+
+Use Right, PageDown, or Space to advance; Left, PageUp, or Shift+Space to go back; Home and End to jump to the first and last slides. Presentation keys prevent page scrolling and leave inputs, editable content, buttons, links, and other interactive controls alone. Modified shortcuts and keys already handled by your components also keep their normal behavior.
+
+Call `useDeck()` anywhere inside a `<Deck>`, including slide content and custom containers, to build your own navigation:
+
+```tsx
+import { useDeck } from '@nkzw/remdx';
+
+function Navigation() {
+  const { slideIndex, slideCount, previousSlide, nextSlide, goToSlide } = useDeck();
+  return (
+    <nav>
+      <button disabled={slideIndex === 0} onClick={previousSlide}>
+        Back
+      </button>
+      <button disabled={slideIndex === slideCount - 1} onClick={nextSlide}>
+        Next
+      </button>
+      <button onClick={() => goToSlide(0)}>First slide</button>
+    </nav>
+  );
+}
+```
+
+The hook also exposes navigation `direction` (`1`, `-1`, or `0`). `goToSlide()` takes a **zero-based index**, clamps indices to the deck bounds, and rejects values that are not safe integers. Custom navigation uses the same transitions and browser history as the keyboard controls.
+
+### Slide lifecycle
+
+Call `useSlide()` inside a slide or its custom container to control animations, media, and other work:
+
+```tsx
+import { useSlide } from '@nkzw/remdx';
+
+function Demo() {
+  const { isActive } = useSlide();
+  return <Terminal running={isActive} />;
+}
+```
+
+The hook returns the slide's zero-based `slideIndex`, `isActive`, `isEntering`, `isExiting`, and navigation `direction` (`1` forward, `-1` back, `0` on initial load). `isActive` becomes true as soon as the slide is selected, including during entry. The transition flags remain true only while their respective animations play; immediate switches and reduced motion leave both false. To keep a demo running through its departure, use `isActive || isExiting`.
+
+Slides stay mounted when hidden, so pause timers, media, and rendering when inactive. Calling the hook outside a `<Slide>` throws an explanatory error.
+
 ### Directional slide animations
 
 All transitions use the Web Animations API. Each phase has `keyframes` and optional timing `options`; keyframes can be shared or differ for forward and back navigation:

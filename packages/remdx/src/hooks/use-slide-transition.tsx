@@ -10,7 +10,7 @@ export default function useSlideTransition(
   const ref = useRef<HTMLDivElement>(null);
   const playback = useRef<Animation | null>(null);
   const previous = useRef({ initialized: false, isActive });
-  const [isExiting, setIsExiting] = useState(false);
+  const [phaseState, setPhaseState] = useState<'idle' | 'entering' | 'exiting'>('idle');
 
   useLayoutEffect(() => {
     const changed = previous.current.isActive !== isActive;
@@ -36,7 +36,7 @@ export default function useSlideTransition(
     ) {
       // Visibility must settle before the browser paints the new slide.
       // oxlint-disable-next-line react-hooks-js/set-state-in-effect
-      setIsExiting(false);
+      setPhaseState('idle');
       return;
     }
 
@@ -48,13 +48,13 @@ export default function useSlideTransition(
         : phase.keyframes;
     if (keyframes.length === 0) {
       // oxlint-disable-next-line react-hooks-js/set-state-in-effect
-      setIsExiting(false);
+      setPhaseState('idle');
       return;
     }
 
     // Retain the outgoing DOM for playback before the next paint.
     // oxlint-disable-next-line react-hooks-js/set-state-in-effect
-    setIsExiting(!isActive);
+    setPhaseState(isActive ? 'entering' : 'exiting');
     const current = element.animate(Array.from(keyframes), {
       duration: 500,
       easing: 'cubic-bezier(0.18, 0.8, 0.18, 1)',
@@ -70,7 +70,7 @@ export default function useSlideTransition(
       }
       playback.current = null;
       current.cancel();
-      setIsExiting(false);
+      setPhaseState('idle');
     };
     void current.finished.then(finish, finish);
   }, [direction, initialized, isActive, transition]);
@@ -82,7 +82,7 @@ export default function useSlideTransition(
         const current = playback.current;
         playback.current = null;
         current?.cancel();
-        setIsExiting(false);
+        setPhaseState('idle');
       }
     };
     reducedMotion.addEventListener('change', handleChange);
@@ -98,5 +98,9 @@ export default function useSlideTransition(
     [],
   );
 
-  return [ref, isExiting] as const;
+  return [
+    ref,
+    !isActive && phaseState === 'exiting',
+    isActive && phaseState === 'entering',
+  ] as const;
 }

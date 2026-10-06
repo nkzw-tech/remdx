@@ -1,10 +1,12 @@
 // @vitest-environment happy-dom
 import { act, type ComponentProps } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
+import { renderToString } from 'react-dom/server';
 import { afterEach, beforeEach, expect, test, vi } from 'vite-plus/test';
 import { DeckContext } from '../src/deck.tsx';
 import { deckReducer, type DeckState } from '../src/hooks/use-deck-state.tsx';
 import useSlideTransition from '../src/hooks/use-slide-transition.tsx';
+import useSlide from '../src/hooks/use-slide.tsx';
 import Slide from '../src/slide.tsx';
 import { defaultTransition, Transitions } from '../src/transitions.tsx';
 import type { SlideTransition } from '../types.tsx';
@@ -191,6 +193,7 @@ function context(index: number, direction = 1, preset = transition): Context {
     advanceSlide: vi.fn(),
     cancelTransition: vi.fn(),
     commitTransition: vi.fn(),
+    goToSlide: vi.fn(),
     initialized: true,
     navigationDirection: direction,
     onSwiped: vi.fn(),
@@ -203,15 +206,22 @@ function context(index: number, direction = 1, preset = transition): Context {
   };
 }
 
+function Lifecycle({ label }: { label: string }) {
+  const slide = useSlide();
+  return <output data-lifecycle={label}>{JSON.stringify(slide)}</output>;
+}
+
 async function renderSlides(value: Context, override?: SlideTransition) {
   await act(() => {
     root.render(
       <DeckContext.Provider value={value}>
         <Slide id={0}>
           <p data-label="first">First</p>
+          <Lifecycle label="first" />
         </Slide>
         <Slide id={1} transition={override}>
           <p data-label="second">Second</p>
+          <Lifecycle label="second" />
         </Slide>
       </DeckContext.Provider>,
     );
@@ -221,6 +231,56 @@ async function renderSlides(value: Context, override?: SlideTransition) {
 function frame(label: string) {
   return container.querySelector(`[data-label="${label}"]`)!.closest<HTMLElement>('[aria-hidden]')!;
 }
+
+function lifecycle(label: string) {
+  return JSON.parse(container.querySelector(`[data-lifecycle="${label}"]`)!.textContent!);
+}
+
+test('useSlide reports active, entering, exiting, and settled states', async () => {
+  await renderSlides(context(0));
+  expect(lifecycle('first')).toEqual({
+    direction: 1,
+    isActive: true,
+    isEntering: false,
+    isExiting: false,
+    slideIndex: 0,
+  });
+  expect(lifecycle('second')).toMatchObject({
+    isActive: false,
+    isEntering: false,
+    isExiting: false,
+    slideIndex: 1,
+  });
+
+  await renderSlides(context(1));
+  expect(lifecycle('first')).toMatchObject({ isActive: false, isExiting: true });
+  expect(lifecycle('second')).toMatchObject({ isActive: true, isEntering: true });
+  await finish(0);
+  await finish(1);
+  expect(lifecycle('first')).toMatchObject({ isActive: false, isExiting: false });
+  expect(lifecycle('second')).toMatchObject({ isActive: true, isEntering: false });
+
+  await renderSlides(context(0, -1));
+  expect(lifecycle('first')).toMatchObject({ direction: -1, isActive: true, isEntering: true });
+  expect(lifecycle('second')).toMatchObject({ direction: -1, isActive: false, isExiting: true });
+});
+
+test('useSlide settles both phases when reduced motion is enabled during entry', async () => {
+  await renderSlides(context(0));
+  await renderSlides(context(1));
+  await act(() => {
+    reducedMotion = true;
+    media.dispatchEvent(new Event('change'));
+  });
+  expect(lifecycle('first')).toMatchObject({ isEntering: false, isExiting: false });
+  expect(lifecycle('second')).toMatchObject({ isEntering: false, isExiting: false });
+});
+
+test('useSlide reports a useful error outside a slide', () => {
+  expect(() => renderToString(<Lifecycle label="outside" />)).toThrow(
+    'remdx: useSlide() must be called inside a <Slide>.',
+  );
+});
 
 test.each([1, -1])('Slide layers and hides outgoing content in direction %s', async (direction) => {
   const start = direction > 0 ? 0 : 1;

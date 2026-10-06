@@ -276,9 +276,6 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1(@types/react@19.3.0)(react@19.3.0)
     devDependencies:
-      '@types/mousetrap':
-        specifier: ^1.6.15
-        version: 1.6.15
       '@types/react':
         specifier: ^19.3.0
         version: 19.3.0
@@ -291,9 +288,6 @@ importers:
       history:
         specifier: ^5.3.0
         version: 5.3.0
-      mousetrap:
-        specifier: ^1.6.5
-        version: 1.6.5
       react:
         specifier: ^19.3.0
         version: 19.3.0
@@ -976,9 +970,6 @@ packages:
 
   '@types/minimist@1.2.5':
     resolution: {integrity: sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==}
-
-  '@types/mousetrap@1.6.15':
-    resolution: {integrity: sha512-qL0hyIMNPow317QWW/63RvL1x5MVMV+Ru3NaY9f/CuEpCqrmb7WeuK2071ZY5hczOnm38qExWM2i2WtkXLSqFw==}
 
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
@@ -2122,9 +2113,6 @@ packages:
   minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
 
-  mousetrap@1.6.5:
-    resolution: {integrity: sha512-QNo4kEepaIBwiT8CDhP98umTetp+JNfQYBWvC1pc6/OAibuXtRcxZ58Qz8skvEHYvURne/7R8T5VoOI7rDsEUA==}
-
   mrmime@2.0.1:
     resolution: {integrity: sha512-Y3wQdFg2Va6etvQ5I82yUhGdsKrcYox6p7FfL1LbK2J4V01F9TGlepTIhnK24t7koZibmg82KGglhA1XK5IsLQ==}
     engines: {node: '>=10'}
@@ -3097,8 +3085,6 @@ snapshots:
   '@types/mdx@2.0.14': {}
 
   '@types/minimist@1.2.5': {}
-
-  '@types/mousetrap@1.6.15': {}
 
   '@types/ms@2.1.0': {}
 
@@ -4348,8 +4334,6 @@ snapshots:
       brace-expansion: 5.0.12
 
   minimist@1.2.8: {}
-
-  mousetrap@1.6.5: {}
 
   mrmime@2.0.1: {}
 

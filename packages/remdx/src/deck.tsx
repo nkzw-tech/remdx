@@ -4,7 +4,7 @@ import { SlideTransition } from '../types.tsx';
 import useAspectRatioFitting from './hooks/use-aspect-ratio-fitting.tsx';
 import useDeckState from './hooks/use-deck-state.tsx';
 import useLocationSync from './hooks/use-location-sync.tsx';
-import useMousetrap from './hooks/use-mousetrap.tsx';
+import usePresentationControls from './hooks/use-presentation-controls.tsx';
 import { defaultTransition } from './transitions.tsx';
 
 type DeckContextType = {
@@ -15,6 +15,7 @@ type DeckContextType = {
   advanceSlide(): void;
   cancelTransition(): void;
   commitTransition(newView?: { stepIndex: number }): void;
+  goToSlide(slideIndex: number): void;
   initialized: boolean;
   navigationDirection: number;
   onSwiped(eventData: SwipeEventData): void;
@@ -86,13 +87,28 @@ export default function Deck({
     [regressSlide, stepForward],
   );
 
-  useMousetrap(
+  const goToSlide = useCallback(
+    (slideIndex: number) => {
+      if (!Number.isSafeInteger(slideIndex)) {
+        throw new TypeError('remdx: goToSlide() expects a safe integer slide index.');
+      }
+      skipTo({
+        slideIndex: Math.max(0, Math.min(slideIndex, slides.length - 1)),
+        stepIndex: 0,
+      });
+    },
+    [skipTo, slides.length],
+  );
+
+  usePresentationControls(
     useMemo(
       () => ({
-        left: () => stepBackward(),
-        right: () => stepForward(),
+        firstSlide: () => goToSlide(0),
+        lastSlide: () => goToSlide(slides.length - 1),
+        nextSlide: stepForward,
+        previousSlide: stepBackward,
       }),
-      [stepForward, stepBackward],
+      [goToSlide, slides.length, stepForward, stepBackward],
     ),
   );
 
@@ -126,6 +142,7 @@ export default function Deck({
       advanceSlide,
       cancelTransition,
       commitTransition,
+      goToSlide,
       initialized,
       navigationDirection,
       onSwiped,
@@ -141,6 +158,7 @@ export default function Deck({
       advanceSlide,
       cancelTransition,
       commitTransition,
+      goToSlide,
       initialized,
       navigationDirection,
       onSwiped,

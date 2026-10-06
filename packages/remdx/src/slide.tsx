@@ -1,9 +1,10 @@
-import { CSSProperties, ReactNode, Suspense, useContext, useEffect } from 'react';
+import { CSSProperties, ReactNode, Suspense, useContext, useEffect, useMemo } from 'react';
 import { useSwipeable } from 'react-swipeable';
 import { SlideContainer, SlideTransition } from '../types.tsx';
 import { DeckContext } from './deck.tsx';
 import { GOTO_FINAL_STEP } from './hooks/use-deck-state.tsx';
 import useSlideTransition from './hooks/use-slide-transition.tsx';
+import { SlideContext } from './hooks/use-slide.tsx';
 
 const FallbackContainer = ({ children, style }: { children: ReactNode; style?: CSSProperties }) => (
   <div style={style}>{children}</div>
@@ -44,7 +45,7 @@ export default function Slide({
 
   const resolvedTransition = slideTransition ?? transition;
   const isActive = activeView.slideIndex === id;
-  const [animationRef, isExiting] = useSlideTransition(
+  const [animationRef, isExiting, isEntering] = useSlideTransition(
     isActive,
     initialized,
     navigationDirection,
@@ -110,50 +111,63 @@ export default function Slide({
     onSwiped: (eventData) => onSwiped(eventData),
   });
 
+  const slideState = useMemo(
+    () => ({
+      direction: navigationDirection,
+      isActive,
+      isEntering,
+      isExiting,
+      slideIndex: id,
+    }),
+    [id, isActive, isEntering, isExiting, navigationDirection],
+  );
+
   return (
-    <div
-      aria-hidden={!isActive}
-      inert={!isActive}
-      ref={animationRef}
-      style={{
-        background: 'transparent',
-        display: isActive || isExiting ? 'block' : 'none',
-        height: '100%',
-        pointerEvents: isActive ? undefined : 'none',
-        position: 'absolute',
-        width: '100%',
-        zIndex: isActive ? (resolvedTransition.enter ? 2 : 0) : isExiting ? 1 : 0,
-      }}
-    >
+    <SlideContext.Provider value={slideState}>
       <div
-        className={className}
+        aria-hidden={!isActive}
+        inert={!isActive}
+        ref={animationRef}
         style={{
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          display: 'flex',
+          background: 'transparent',
+          display: isActive || isExiting ? 'block' : 'none',
           height: '100%',
-          overflow: 'hidden',
-          position: 'relative',
+          pointerEvents: isActive ? undefined : 'none',
+          position: 'absolute',
           width: '100%',
-          zIndex: '0',
-          ...style,
-          ...(image ? { backgroundImage: `url('${image}')` } : null),
+          zIndex: isActive ? (resolvedTransition.enter ? 2 : 0) : isExiting ? 1 : 0,
         }}
-        {...swipeHandler}
       >
-        <Container
+        <div
+          className={className}
           style={{
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
             display: 'flex',
-            flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            padding,
+            height: '100%',
+            overflow: 'hidden',
+            position: 'relative',
+            width: '100%',
+            zIndex: '0',
+            ...style,
+            ...(image ? { backgroundImage: `url('${image}')` } : null),
           }}
+          {...swipeHandler}
         >
-          <Suspense>{children}</Suspense>
-        </Container>
+          <Container
+            style={{
+              display: 'flex',
+              flex: 1,
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              padding,
+            }}
+          >
+            <Suspense>{children}</Suspense>
+          </Container>
+        </div>
       </div>
-    </div>
+    </SlideContext.Provider>
   );
 }
