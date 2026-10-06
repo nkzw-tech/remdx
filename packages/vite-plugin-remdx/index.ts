@@ -7,13 +7,17 @@ import { toJs } from 'estree-util-to-js';
 import matter from 'gray-matter';
 import normalizeNewline from 'normalize-newline';
 import rehypeRaw from 'rehype-raw';
-import { createHighlighter, type ShikiTransformer, type ThemeRegistrationResolved } from 'shiki';
+import {
+  createHighlighter,
+  isSpecialLang,
+  type ShikiTransformer,
+  type ThemeRegistrationResolved,
+} from 'shiki';
 import type { Plugin } from 'vite';
 
 type Slide = [string, Record<string, unknown>];
 
 const MODULE_HEADER_REGEXP = /^(?:import|export)\s/;
-const CODE_FENCE_HEADER_REGEXP = /^```([^\s`{]+)([^\n]*)$/gm;
 
 const Licht = JSON.parse(
   readFileSync(join(import.meta.dirname, './lib/licht.json'), 'utf8'),
@@ -45,28 +49,33 @@ const shikiTransformerCodeTitle = (): ShikiTransformer => ({
   },
 });
 
-const extractFenceLanguages = (source: string) => {
-  const languages = new Set<string>();
-  for (const match of source.matchAll(CODE_FENCE_HEADER_REGEXP)) {
-    const language = match[1]?.trim().toLowerCase();
-    if (language) {
-      languages.add(language);
-    }
-  }
-  return languages;
-};
-
 const addTagsToTypescript = (language: string) =>
   language === 'ts' || language === 'typescript' ? 'ts-tags' : language;
 
 type MarkdownTreeNode = {
   children?: Array<unknown>;
   data?: Record<string, unknown>;
+  lang?: string;
   meta?: string;
   type: string;
 };
 
-const visitCodeNodes = (node: MarkdownTreeNode) => {
+const visitCodeNodes = async (
+  node: MarkdownTreeNode,
+  highlighter: Awaited<ReturnType<typeof createHighlighter>>,
+) => {
+  if (node.type === 'code' && node.lang) {
+    node.lang = addTagsToTypescript(node.lang.toLowerCase());
+    try {
+      // ANSI and plaintext do not appear in getLoadedLanguages()
+      if (!isSpecialLang(node.lang) && !highlighter.getLoadedLanguages().includes(node.lang)) {
+        await highlighter.loadLanguage(node.lang as never);
+      }
+    } catch {
+      node.lang = 'text';
+    }
+  }
+
   if (node.type === 'code' && node.meta) {
     node.data ??= {};
     node.data.meta = node.meta;
@@ -77,16 +86,14 @@ const visitCodeNodes = (node: MarkdownTreeNode) => {
 
   for (const child of node.children || []) {
     if (typeof child === 'object' && child !== null && 'type' in child) {
-      visitCodeNodes(child as MarkdownTreeNode);
+      await visitCodeNodes(child as MarkdownTreeNode, highlighter);
     }
   }
 };
 
-const preserveCodeBlockMetaTransformer = (tree: MarkdownTreeNode) => {
-  visitCodeNodes(tree);
-};
-
-const preserveCodeBlockMeta = () => preserveCodeBlockMetaTransformer;
+const preserveCodeBlockMeta =
+  (highlighter: Awaited<ReturnType<typeof createHighlighter>>) => () => (tree: MarkdownTreeNode) =>
+    visitCodeNodes(tree, highlighter);
 
 type JavaScriptProgram = Parameters<typeof toJs>[0];
 
@@ -136,7 +143,6 @@ const parseSlide = (text: string): Slide => {
 
 export default function remdx(): Plugin {
   let highlighterPromise: Promise<Awaited<ReturnType<typeof createHighlighter>>>;
-  const loadedLanguages = new Set<string>();
   const isProduction = process.env.NODE_ENV === 'production';
 
   const wrapComponent = (content: string, data: Record<string, unknown>) => `(() => {
@@ -276,55 +282,14 @@ export default function remdx(): Plugin {
     return highlighterPromise;
   };
 
-  const normalizeAndLoadFenceLanguages = async (source: string) => {
-    const unsupportedLanguages = new Set<string>();
-    const highlighter = await getHighlighter();
-
-    for (const language of extractFenceLanguages(source)) {
-      const normalizedLanguage = addTagsToTypescript(language);
-
-      if (loadedLanguages.has(normalizedLanguage)) {
-        continue;
-      }
-      if (unsupportedLanguages.has(normalizedLanguage)) {
-        continue;
-      }
-      try {
-        await highlighter.loadLanguage(normalizedLanguage as never);
-        loadedLanguages.add(normalizedLanguage);
-      } catch {
-        unsupportedLanguages.add(normalizedLanguage);
-      }
-    }
-
-    return source.replaceAll(
-      CODE_FENCE_HEADER_REGEXP,
-      (header, language: string, metadata = '') => {
-        const rawLanguage = language.trim().toLowerCase();
-        const normalizedLanguage = addTagsToTypescript(rawLanguage);
-
-        if (unsupportedLanguages.has(normalizedLanguage)) {
-          return `\`\`\`text${metadata}`;
-        }
-
-        if (normalizedLanguage !== rawLanguage) {
-          return `\`\`\`${normalizedLanguage}${metadata}`;
-        }
-
-        return header;
-      },
-    );
-  };
-
   return {
     enforce: 'pre',
     name: 'mdx-transform',
     async transform(code: string, id: string) {
       if (id.endsWith('.re.mdx')) {
-        const normalizedCode = await normalizeAndLoadFenceLanguages(code);
         const highlighter = await getHighlighter();
 
-        return await transform(normalizedCode, {
+        return await transform(code, {
           recmaPlugins: [removeModuleDeclarations, removeDefaultExport],
           rehypePlugins: [
             [rehypeRaw, { passThrough: nodeTypes }],
@@ -340,7 +305,7 @@ export default function remdx(): Plugin {
               },
             ],
           ],
-          remarkPlugins: [preserveCodeBlockMeta],
+          remarkPlugins: [preserveCodeBlockMeta(highlighter)],
         });
       }
     },
