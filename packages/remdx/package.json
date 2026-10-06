@@ -25,7 +25,6 @@
     "mousetrap": "^1.6.5",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-spring": "^10.0.4",
     "react-swipeable": "^7.0.2",
     "use-resize-observer": "^10.0.0",
     "vite-plus": "catalog:"

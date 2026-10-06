@@ -61,6 +61,45 @@ Then create your `slides.re.mdx` and start the dev server via `vp dev`.
 - The inbuilt image component used for inline images via Markdown syntax (for example: `![Tokyo in the Dark](dark.jpg?height=60vh&borderRadius=20px)`) can be styled by passing CSS properties to the query string.
 - If you are using ReMDX for presentations and you like it, please add a slide or note at the end saying "Made with [ReMDX](https://github.com/nkzw-tech/remdx)". If you can, share the source of your slide deck with the community.
 
+### Directional slide animations
+
+All transitions use the Web Animations API. Each phase has `keyframes` and optional timing `options`; keyframes can be shared or differ for forward and back navigation:
+
+```tsx
+import type { SlideTransition } from '@nkzw/remdx';
+
+export const Transitions = {
+  reveal: {
+    enter: {
+      keyframes: {
+        forward: [
+          { opacity: 0, transform: 'translateX(32px)' },
+          { opacity: 1, transform: 'none' },
+        ],
+        back: [
+          { opacity: 0, transform: 'translateX(-32px)' },
+          { opacity: 1, transform: 'none' },
+        ],
+      },
+      options: { duration: 500, easing: 'cubic-bezier(0.18, 0.8, 0.18, 1)' },
+    },
+    leave: {
+      keyframes: [
+        { opacity: 1, filter: 'blur(0)' },
+        { opacity: 0, filter: 'blur(8px)' },
+      ],
+      options: { duration: 360, easing: 'cubic-bezier(0.4, 0, 0.7, 1)' },
+    },
+  },
+} satisfies Record<string, SlideTransition>;
+```
+
+Export this object from your deck and select `transition: reveal` in a slide's front matter, or pass a transition directly to `<Deck>` or `<Slide>`. A slide transition replaces the deck transition completely. Use `{}` or `Transitions.none` for an immediate switch; omit a phase to skip that animation. The default timing is 500 ms with `cubic-bezier(0.18, 0.8, 0.18, 1)`. Playback uses `fill: both` and releases animated styles on completion, so keyframes should end at the slide's normal appearance.
+
+The outgoing slide stays visible until its animation finishes. Incoming slides with an entrance animation appear above it; without an entrance animation, they appear beneath it so `leaveOnly` can reveal them. Inactive slides are hidden from assistive technology and cannot receive interaction. Navigation cancels interrupted animation; initial loading and reduced motion switch immediately, including when reduced motion is enabled during playback. Within-slide steps and transition object changes do not interrupt playback. Browser history determines direction from the destination. The built-in `default`, `transformRight`, `leaveOnly`, `opacity`, and `none` presets use this same engine.
+
+This replaces the React Spring transition API. Move the old `from` and `enter` styles into `enter.keyframes`, and the departure styles into `leave.keyframes`. Directional keyframes belong under `keyframes.forward` and `keyframes.back`; timing belongs under each phase's `options`. The earlier nested `animation` wrapper is no longer used.
+
 ## Context & Decisions
 
 ### Prior Art

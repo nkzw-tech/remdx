@@ -5,10 +5,16 @@ export type MDXComponents = Parameters<typeof useMDXComponents>[0];
 
 export type Themes = Record<string, CSSProperties>;
 
+export type SlideAnimation = Readonly<{
+  keyframes:
+    | ReadonlyArray<Keyframe>
+    | Readonly<{ back: ReadonlyArray<Keyframe>; forward: ReadonlyArray<Keyframe> }>;
+  options?: Omit<KeyframeAnimationOptions, 'fill'>;
+}>;
+
 export type SlideTransition = Readonly<{
-  enter?: CSSProperties;
-  from?: CSSProperties;
-  leave?: CSSProperties;
+  enter?: SlideAnimation;
+  leave?: SlideAnimation;
 }>;
 
 export type SlideContainer = ({

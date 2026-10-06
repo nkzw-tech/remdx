@@ -1,56 +1,31 @@
-import { SlideTransition } from '../types.tsx';
+import type { SlideAnimation, SlideTransition } from '../types.tsx';
+
+const slideEnter: SlideAnimation = {
+  keyframes: {
+    back: [{ transform: 'translateX(-100%)' }, { transform: 'translateX(0%)' }],
+    forward: [{ transform: 'translateX(100%)' }, { transform: 'translateX(0%)' }],
+  },
+};
+
+const slideLeave: SlideAnimation = {
+  keyframes: {
+    back: [{ transform: 'translateX(0%)' }, { transform: 'translateX(100%)' }],
+    forward: [{ transform: 'translateX(0%)' }, { transform: 'translateX(-100%)' }],
+  },
+};
 
 export const defaultTransition: SlideTransition = {
-  enter: {
-    opacity: 1,
-    transform: 'translateX(0%)',
-  },
-  from: {
-    opacity: 0,
-    transform: 'translateX(100%)',
-  },
-  leave: {
-    opacity: 1,
-    transform: 'translateX(-100%)',
-  },
+  enter: slideEnter,
+  leave: slideLeave,
 };
 
 export const Transitions: Record<string, SlideTransition> = {
   default: defaultTransition,
-  leaveOnly: {
-    enter: {
-      transform: 'translateX(0%)',
-    },
-    from: {},
-    leave: {
-      transform: 'translateX(-100%)',
-    },
-  },
-  none: {
-    enter: {},
-    from: {},
-    leave: {},
-  },
+  leaveOnly: { leave: slideLeave },
+  none: {},
   opacity: {
-    enter: {
-      opacity: 1,
-    },
-    from: {
-      opacity: 0,
-    },
-    leave: {
-      opacity: 1,
-    },
+    enter: { keyframes: [{ opacity: 0 }, { opacity: 1 }] },
+    leave: { keyframes: [{ opacity: 1 }, { opacity: 0 }] },
   },
-  transformRight: {
-    enter: {
-      transform: 'translateX(0%)',
-    },
-    from: {
-      transform: 'translateX(100%)',
-    },
-    leave: {
-      transform: 'translateX(-100%)',
-    },
-  },
+  transformRight: defaultTransition,
 };

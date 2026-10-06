@@ -36,7 +36,7 @@ type ReducerActions =
   | { payload?: DeckView; type: 'COMMIT_TRANSITION' }
   | { payload?: undefined; type: 'CANCEL_TRANSITION' };
 
-function deckReducer(state: DeckState, { payload = {}, type }: ReducerActions) {
+export function deckReducer(state: DeckState, { payload = {}, type }: ReducerActions) {
   switch (type) {
     case 'INITIALIZE_TO':
       return {
@@ -45,11 +45,19 @@ function deckReducer(state: DeckState, { payload = {}, type }: ReducerActions) {
         navigationDirection: 0,
         pendingView: { ...state.pendingView, ...payload },
       };
-    case 'SKIP_TO':
+    case 'SKIP_TO': {
+      const pendingView = { ...state.pendingView, ...payload };
+      const slideDifference = pendingView.slideIndex - state.activeView.slideIndex;
+      const stepDifference =
+        typeof pendingView.stepIndex === 'number'
+          ? pendingView.stepIndex - state.activeView.stepIndex
+          : 0;
       return {
         ...state,
-        pendingView: { ...state.pendingView, ...payload },
+        navigationDirection: Math.sign(slideDifference || stepDifference),
+        pendingView,
       };
+    }
     case 'STEP_FORWARD':
       return {
         ...state,

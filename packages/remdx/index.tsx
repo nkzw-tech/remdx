@@ -1,4 +1,10 @@
-export type { MDXComponents as ComponentList, ReMDXSlide, Themes } from './types.tsx';
+export type {
+  MDXComponents as ComponentList,
+  ReMDXSlide,
+  SlideAnimation,
+  SlideTransition,
+  Themes,
+} from './types.tsx';
 
 export { default as Deck } from './src/deck.tsx';
 export { default as render } from './src/render.tsx';
