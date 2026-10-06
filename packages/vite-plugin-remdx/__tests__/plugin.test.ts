@@ -30,7 +30,8 @@ theme: dark
           import { Fragment as _Fragment, jsxDEV as _jsxDEV } from 'react/jsx-dev-runtime';
           import { useMDXComponents as _provideComponents } from "@nkzw/remdx";
           import data from './data.tsx';
-    export { Components } from './Components.tsx';
+    export {Components} from './Components.tsx';
+
 
           export default [(() => {
         function MDXContentWrapper(props) {

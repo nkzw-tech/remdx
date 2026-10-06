@@ -1,8 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { compile, CompileOptions, nodeTypes } from '@mdx-js/mdx';
+import { compile, CompileOptions, createProcessor, nodeTypes } from '@mdx-js/mdx';
 import rehypeShikiFromHighlighter from '@shikijs/rehype/core';
 import { transformerMetaHighlight } from '@shikijs/transformers';
+import { toJs } from 'estree-util-to-js';
 import matter from 'gray-matter';
 import normalizeNewline from 'normalize-newline';
 import rehypeRaw from 'rehype-raw';
@@ -12,7 +13,7 @@ import type { Plugin } from 'vite';
 type Slide = [string, Record<string, unknown>];
 
 const EXPORT_DEFAULT_REGEXP = /export\sdefault\s/g;
-const MODULE_REGEXP = /\\`|`(?:\\`|[^`])*`|(^(?:import|export)[^;]+;)/gm;
+const MODULE_HEADER_REGEXP = /^(?:import|export)\s/;
 const CODE_FENCE_HEADER_REGEXP = /^```([^\s`{]+)([^\n]*)$/gm;
 
 const Licht = JSON.parse(
@@ -88,6 +89,21 @@ const preserveCodeBlockMetaTransformer = (tree: MarkdownTreeNode) => {
 
 const preserveCodeBlockMeta = () => preserveCodeBlockMetaTransformer;
 
+type JavaScriptProgram = Parameters<typeof toJs>[0];
+
+const isSourceDeclaration = (node: JavaScriptProgram['body'][number]) =>
+  'start' in node && typeof node.start === 'number';
+
+const removeModuleDeclarations = () => (tree: JavaScriptProgram) => {
+  tree.body = tree.body.filter(
+    (node) =>
+      !isSourceDeclaration(node) &&
+      node.type !== 'ImportDeclaration' &&
+      node.type !== 'ExportNamedDeclaration' &&
+      node.type !== 'ExportAllDeclaration',
+  );
+};
+
 const compileMDX = async (content: string, options: CompileOptions, development = true) =>
   String(
     (
@@ -116,10 +132,7 @@ export default function remdx(): Plugin {
 
   const wrapComponent = (content: string, data: Record<string, unknown>) => `(() => {
     function MDXContentWrapper(props) {
-      ${content
-        .replaceAll(EXPORT_DEFAULT_REGEXP, '')
-        .replaceAll(MODULE_REGEXP, (value, group1) => (group1 ? '' : value))
-        .trim()}
+      ${content.replaceAll(EXPORT_DEFAULT_REGEXP, '').trim()}
       return ${isProduction ? '_jsx' : '_jsxDEV'}(MDXContent, props);
     };
     MDXContentWrapper.isMDXComponent = true;
@@ -151,17 +164,35 @@ export default function remdx(): Plugin {
       }
     };
 
-    const lines = normalizeNewline(source)
-      .replaceAll(MODULE_REGEXP, (value, group1) => {
-        if (!group1) {
-          return value;
-        }
-        inlineModules.push(value);
-        return '';
-      })
-      .split(/\n/g);
+    const lines = normalizeNewline(source).split(/\n/g);
+    const parser = createProcessor();
 
-    inlineModules = Array.from(new Set(inlineModules));
+    const extractModule = (start: number) => {
+      for (let end = start; end < lines.length; end++) {
+        if (end + 1 < lines.length && lines[end + 1].trim() !== '') {
+          continue;
+        }
+        let tree;
+        try {
+          tree = parser.parse(lines.slice(start, end + 1).join('\n'));
+        } catch (error) {
+          // Blank lines inside function bodies and template literals do not
+          // terminate a module. Let the MDX parser find the complete statement.
+          if (end === lines.length - 1) {
+            throw error;
+          }
+          continue;
+        }
+        const node = tree.children[0];
+        if (node?.type === 'mdxjsEsm') {
+          inlineModules.push(node.value);
+          const lastLine = start + node.position!.end.line - 1;
+          lines.fill('', start, lastLine + 1);
+          return lastLine;
+        }
+      }
+      throw new Error('Expected an MDX import or export declaration.');
+    };
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trimEnd();
@@ -183,11 +214,36 @@ export default function remdx(): Plugin {
             break;
           }
         }
+      } else if (MODULE_HEADER_REGEXP.test(line)) {
+        i = extractModule(i);
       }
     }
 
     if (start <= lines.length - 1) {
       slice(lines.length);
+    }
+
+    inlineModules = Array.from(new Set(inlineModules));
+    let compiledModules = '';
+    if (inlineModules.length) {
+      await compileMDX(
+        inlineModules.join('\n'),
+        {
+          ...options,
+          recmaPlugins: [
+            () => (tree: JavaScriptProgram) => {
+              // Original ESM nodes retain their source offsets. MDX's generated
+              // runtime imports and component wrappers have no source offsets.
+              compiledModules = toJs({
+                ...tree,
+                body: tree.body.filter(isSourceDeclaration),
+              }).value;
+            },
+            ...(options.recmaPlugins ?? []),
+          ],
+        },
+        !isProduction,
+      );
     }
 
     return `
@@ -198,7 +254,7 @@ export default function remdx(): Plugin {
           : `import { Fragment as _Fragment, jsxDEV as _jsxDEV } from 'react/jsx-dev-runtime';`
       }
       import { useMDXComponents as _provideComponents } from "@nkzw/remdx";
-      ${inlineModules.join('\n')}\n
+      ${compiledModules}\n
       export default [${(await compileSlides(slides)).join(',\n')}];
     `;
   };
@@ -260,6 +316,7 @@ export default function remdx(): Plugin {
         const highlighter = await getHighlighter();
 
         return await transform(normalizedCode, {
+          recmaPlugins: [removeModuleDeclarations],
           rehypePlugins: [
             [rehypeRaw, { passThrough: nodeTypes }],
             [
