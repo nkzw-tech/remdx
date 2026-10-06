@@ -183,3 +183,35 @@ test('slide separators inside indented fences stay in the code block', async () 
   expect(output.match(/MDXContentWrapper\.isMDXComponent/g)).toHaveLength(2);
   expect(output).toContain('children: "---"');
 });
+
+test.each(['````', '~~~'])(
+  'fence-shaped content inside %s fences is preserved',
+  async (outerFence) => {
+    const transformFn = remdx().transform as unknown as (
+      code: string,
+      id: string,
+    ) => Promise<string>;
+    const fence = '```';
+    const output = await transformFn(
+      [
+        `${outerFence}text`,
+        `  ${fence}typescript`,
+        `  ${fence}unsupported-language`,
+        '---',
+        '',
+        `  ${fence}`,
+        outerFence,
+        '',
+        '---',
+        '',
+        'Second slide',
+      ].join('\n'),
+      'slides.re.mdx',
+    );
+
+    expect(output.match(/MDXContentWrapper\.isMDXComponent/g)).toHaveLength(2);
+    expect(output).toContain(`${fence}typescript`);
+    expect(output).toContain(`${fence}unsupported-language`);
+    expect(output).not.toContain('ts-tags');
+  },
+);

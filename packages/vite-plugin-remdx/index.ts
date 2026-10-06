@@ -13,7 +13,7 @@ type Slide = [string, Record<string, unknown>];
 
 const EXPORT_DEFAULT_REGEXP = /export\sdefault\s/g;
 const MODULE_REGEXP = /\\`|`(?:\\`|[^`])*`|(^(?:import|export)[^;]+;)/gm;
-const CODE_FENCE_HEADER_REGEXP = /^([ \t]*)```([^\s`{]+)([^\n]*)$/gm;
+const CODE_FENCE_HEADER_REGEXP = /^([ \t]*)(`{3,}|~{3,})([^\s`{]*)([^\n]*)$/gm;
 
 const Licht = JSON.parse(
   readFileSync(join(import.meta.dirname, './lib/licht.json'), 'utf8'),
@@ -45,14 +45,48 @@ const shikiTransformerCodeTitle = (): ShikiTransformer => ({
   },
 });
 
+const isClosingFence = (line: string, fence: string) => {
+  const match = line.match(/^[ \t]*(`{3,}|~{3,})[ \t]*\r?$/);
+  return match && match[1][0] === fence[0] && match[1].length >= fence.length;
+};
+
+const mapFenceHeaders = (
+  source: string,
+  callback: (
+    header: string,
+    indentation: string,
+    fence: string,
+    language: string,
+    metadata: string,
+  ) => string,
+) => {
+  let activeFence: string | undefined;
+  return source.replaceAll(
+    CODE_FENCE_HEADER_REGEXP,
+    (header, indentation: string, fence: string, language: string, metadata: string) => {
+      if (activeFence) {
+        if (isClosingFence(header, activeFence)) {
+          activeFence = undefined;
+        }
+        return header;
+      }
+      if (fence[0] === '`' && (language + metadata).includes('`')) {
+        return header;
+      }
+      activeFence = fence;
+      return callback(header, indentation, fence, language, metadata);
+    },
+  );
+};
+
 const extractFenceLanguages = (source: string) => {
   const languages = new Set<string>();
-  for (const match of source.matchAll(CODE_FENCE_HEADER_REGEXP)) {
-    const language = match[2]?.trim().toLowerCase();
+  mapFenceHeaders(source, (header, _indentation, _fence, language) => {
     if (language) {
-      languages.add(language);
+      languages.add(language.trim().toLowerCase());
     }
-  }
+    return header;
+  });
   return languages;
 };
 
@@ -177,10 +211,13 @@ export default function remdx(): Plugin {
             }
           }
         }
-      } else if (line.trimStart().startsWith('```')) {
-        for (i += 1; i < lines.length; i++) {
-          if (lines[i].trimStart().startsWith('```')) {
-            break;
+      } else {
+        const fence = line.match(/^[ \t]*(`{3,}|~{3,})(.*)$/);
+        if (fence && !(fence[1][0] === '`' && fence[2].includes('`'))) {
+          for (i += 1; i < lines.length; i++) {
+            if (isClosingFence(lines[i], fence[1])) {
+              break;
+            }
           }
         }
       }
@@ -232,23 +269,20 @@ export default function remdx(): Plugin {
       }
     }
 
-    return source.replaceAll(
-      CODE_FENCE_HEADER_REGEXP,
-      (header, indentation: string, language: string, metadata = '') => {
-        const rawLanguage = language.trim().toLowerCase();
-        const normalizedLanguage = addTagsToTypescript(rawLanguage);
+    return mapFenceHeaders(source, (header, indentation, fence, language, metadata) => {
+      const rawLanguage = language.trim().toLowerCase();
+      const normalizedLanguage = addTagsToTypescript(rawLanguage);
 
-        if (unsupportedLanguages.has(normalizedLanguage)) {
-          return `${indentation}\`\`\`text${metadata}`;
-        }
+      if (unsupportedLanguages.has(normalizedLanguage)) {
+        return `${indentation}${fence}text${metadata}`;
+      }
 
-        if (normalizedLanguage !== rawLanguage) {
-          return `${indentation}\`\`\`${normalizedLanguage}${metadata}`;
-        }
+      if (normalizedLanguage !== rawLanguage) {
+        return `${indentation}${fence}${normalizedLanguage}${metadata}`;
+      }
 
-        return header;
-      },
-    );
+      return header;
+    });
   };
 
   return {
