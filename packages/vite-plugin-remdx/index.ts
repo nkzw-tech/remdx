@@ -182,8 +182,16 @@ export default function remdx(): Plugin {
             }
           }
         }
+      } else if (line.trimStart().startsWith('{')) {
+        const comment = lines
+          .slice(i)
+          .join('\n')
+          .match(/^\s*\{\s*\/\*[\s\S]*?\*\//);
+        if (comment) {
+          i += comment[0].split('\n').length - 1;
+        }
       } else {
-        const fence = line.match(/^[ \t]*(`{3,}|~{3,})(.*)$/);
+        const fence = line.match(/^[ \t]*(?:(?:[-+*]|\d{1,9}[.)])\s+)?(`{3,}|~{3,})(.*)$/);
         if (fence && !(fence[1][0] === '`' && fence[2].includes('`'))) {
           for (i += 1; i < lines.length; i++) {
             if (isClosingFence(lines[i], fence[1])) {

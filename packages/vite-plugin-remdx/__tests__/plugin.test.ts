@@ -235,3 +235,17 @@ test('frontmatter scalar is preserved', async () => {
   );
   expect(output).toContain('"example":"```typescript\\nconst x = 1;\\n```\\n"');
 });
+
+test.each([
+  ['{/*', '  ```typescript', '*/}'],
+  ['{', '  /*', '  ```typescript', '  */', '}'],
+  ['- ```typescript', '  const x = 1;', '  ```'],
+  ['1. ```typescript', '   const x = 1;', '   ```'],
+])('fence-shaped comments and list fences preserve slide separators', async (...lines) => {
+  const transformFn = remdx().transform as unknown as (code: string, id: string) => Promise<string>;
+  const output = await transformFn(
+    [...lines, '', '---', '', '# Second'].join('\n'),
+    'slides.re.mdx',
+  );
+  expect(output.match(/MDXContentWrapper\.isMDXComponent/g)).toHaveLength(2);
+});
