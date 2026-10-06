@@ -7,55 +7,75 @@ export type SlideState = {
   stepIndex?: number | typeof GOTO_FINAL_STEP;
 };
 
-export function mapLocationToState(location: Pick<Location, 'search'>): SlideState {
-  const { search } = location;
+const slidePath = /^(.*)\/slide-([^/]+)(?:\/step-([^/]+))?\/?$/;
+
+function parseIndex(value: string, minimum: number, label: string): number {
+  const index = Number(value);
+  if (!/^\d+$/.test(value) || !Number.isSafeInteger(index) || index < minimum) {
+    throw new Error(`Invalid ${label}: '${value}'`);
+  }
+  return index;
+}
+
+function getBasePath(pathname: string): string {
+  return (slidePath.exec(pathname)?.[1] ?? pathname).replace(/\/+$/, '');
+}
+
+export function mapLocationToState(location: Pick<Location, 'pathname' | 'search'>): DeckView {
+  const { pathname, search } = location;
+  const route = slidePath.exec(pathname);
+  if (route) {
+    const [, , slide, step] = route;
+    return {
+      slideIndex: parseIndex(slide, 1, 'slide number in URL path') - 1,
+      stepIndex:
+        step === 'final'
+          ? GOTO_FINAL_STEP
+          : step === undefined
+            ? 0
+            : parseIndex(step, 1, 'step number in URL path'),
+    };
+  }
+
+  // Read old links, but always write the canonical path below.
   const { slideIndex: rawSlideIndex, stepIndex: rawStepIndex } = Object.fromEntries(
     new URLSearchParams(search),
   );
-
-  const nextState: SlideState = {};
   if (rawSlideIndex === undefined) {
-    return nextState;
+    return { slideIndex: 0, stepIndex: 0 };
   }
-
-  nextState.slideIndex = Number(rawSlideIndex);
-  if (Number.isNaN(nextState.slideIndex)) {
-    throw new Error(`Invalid slide index in URL query string: '${search}'`);
-  }
-
-  if (rawStepIndex === 'final') {
-    nextState.stepIndex = GOTO_FINAL_STEP;
-  } else if (rawStepIndex !== undefined) {
-    nextState.stepIndex = Number(rawStepIndex);
-    if (Number.isNaN(nextState.stepIndex)) {
-      throw new Error(`Invalid step index in URL query string: '${search}'`);
-    }
-  }
-
-  return nextState;
+  return {
+    slideIndex: parseIndex(rawSlideIndex, 0, 'slide index in URL query string'),
+    stepIndex:
+      rawStepIndex === 'final'
+        ? GOTO_FINAL_STEP
+        : rawStepIndex === undefined
+          ? 0
+          : parseIndex(rawStepIndex, 0, 'step index in URL query string'),
+  };
 }
 
-export function mapStateToLocation(state: SlideState) {
+export function mapStateToLocation(state: SlideState, basePath = '') {
   const { slideIndex, stepIndex } = state;
-  const query: Record<string, string> = {};
   if (typeof slideIndex !== 'number') {
     return {};
   }
-
-  query.slideIndex = String(slideIndex);
-  if (typeof stepIndex === 'number') {
-    query.stepIndex = String(stepIndex);
-  } else if (stepIndex === GOTO_FINAL_STEP) {
-    query.stepIndex = 'final';
-  }
+  const slide = parseIndex(String(slideIndex), 0, 'slide index');
+  const step =
+    stepIndex === GOTO_FINAL_STEP
+      ? '/step-final'
+      : typeof stepIndex === 'number' && stepIndex !== 0
+        ? `/step-${parseIndex(String(stepIndex), 1, 'step index')}`
+        : '';
   return {
-    search: '?' + new URLSearchParams(query).toString(),
+    pathname: `${basePath.replace(/\/+$/, '')}/slide-${slide + 1}${step}`,
+    search: '',
   };
 }
 
 type LocationStateOptions = {
   historyFactory?: typeof createBrowserHistory;
-  setState(state: Partial<DeckView>): void;
+  setState(state: DeckView): void;
 };
 
 export default function useLocationSync({
@@ -63,15 +83,24 @@ export default function useLocationSync({
   setState,
 }: LocationStateOptions) {
   const [history] = useState(() => (typeof document !== 'undefined' ? historyFactory() : null));
+  const [basePath] = useState(() => getBasePath(history?.location.pathname ?? '/'));
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     return initialized
-      ? history?.listen(({ location }) => {
-          setState(mapLocationToState(location));
+      ? history?.listen(({ action, location }) => {
+          if (action !== 'POP') {
+            return;
+          }
+          const state = mapLocationToState(location);
+          const canonical = mapStateToLocation(state, basePath);
+          if (location.pathname !== canonical.pathname || location.search !== canonical.search) {
+            history.replace(canonical);
+          }
+          setState(state);
         })
       : undefined;
-  }, [initialized, history, setState]);
+  }, [basePath, initialized, history, setState]);
 
   return [
     useCallback(
@@ -85,11 +114,11 @@ export default function useLocationSync({
           ...defaultState,
           ...mapLocationToState(location),
         };
-        history.replace(mapStateToLocation(initialState));
+        history.replace(mapStateToLocation(initialState, basePath));
         setInitialized(true);
         return initialState;
       },
-      [history],
+      [basePath, history],
     ),
     useCallback(
       (state: SlideState) => {
@@ -98,15 +127,21 @@ export default function useLocationSync({
         }
 
         const { location } = history;
-        const nextLocation = mapStateToLocation({
-          ...mapLocationToState(location),
-          ...state,
-        });
-        if (location.search !== nextLocation.search) {
+        const nextLocation = mapStateToLocation(
+          {
+            ...mapLocationToState(location),
+            ...state,
+          },
+          basePath,
+        );
+        if (
+          location.pathname !== nextLocation.pathname ||
+          location.search !== nextLocation.search
+        ) {
           history.push(nextLocation);
         }
       },
-      [history, initialized],
+      [basePath, history, initialized],
     ),
   ] as const;
 }

@@ -61,6 +61,12 @@ Then create your `slides.re.mdx` and start the dev server via `vp dev`.
 - The inbuilt image component used for inline images via Markdown syntax (for example: `![Tokyo in the Dark](dark.jpg?height=60vh&borderRadius=20px)`) can be styled by passing CSS properties to the query string.
 - If you are using ReMDX for presentations and you like it, please add a slide or note at the end saying "Made with [ReMDX](https://github.com/nkzw-tech/remdx)". If you can, share the source of your slide deck with the community.
 
+### Slide URLs
+
+Slides use paths such as `/slide-1` and `/slide-8`; slide numbers start at one. Revealed steps use `/slide-8/step-2`, with the initial step omitted. `/slide-8/step-final` selects the slide's final step. ReMDX keeps these paths in sync with navigation and browser back/forward. Opening the deck root selects the first slide.
+
+Old `?slideIndex=7&stepIndex=2` links still open and are replaced with `/slide-8/step-2` without adding a history entry. Decks hosted in a subdirectory keep their prefix, for example `/talk/slide-8`. Configure your host to serve the deck's `index.html` for slide paths so direct links and reloads work; Vite's SPA dev server handles this automatically.
+
 ### Directional slide animations
 
 All transitions use the Web Animations API. Each phase has `keyframes` and optional timing `options`; keyframes can be shared or differ for forward and back navigation:
