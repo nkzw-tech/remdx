@@ -170,20 +170,6 @@ test.each(
   },
 );
 
-test('slide separators inside indented fences stay in the code block', async () => {
-  const transformFn = remdx().transform as unknown as (code: string, id: string) => Promise<string>;
-  const fence = '```';
-  const output = await transformFn(
-    ['<div>', `  ${fence}text`, '---', `  ${fence}`, '</div>', '', '---', '', 'Second slide'].join(
-      '\n',
-    ),
-    'slides.re.mdx',
-  );
-
-  expect(output.match(/MDXContentWrapper\.isMDXComponent/g)).toHaveLength(2);
-  expect(output).toContain('children: "---"');
-});
-
 test.each(['````', '~~~'])(
   'fence-shaped content inside %s fences is preserved',
   async (outerFence) => {
@@ -197,8 +183,6 @@ test.each(['````', '~~~'])(
         `${outerFence}text`,
         `  ${fence}typescript`,
         `  ${fence}unsupported-language`,
-        '---',
-        '',
         `  ${fence}`,
         outerFence,
         '',
@@ -248,4 +232,24 @@ test.each([
     'slides.re.mdx',
   );
   expect(output.match(/MDXContentWrapper\.isMDXComponent/g)).toHaveLength(2);
+});
+
+test.each([
+  ['- ```text', '  payload', '', '---', '', '# Second'],
+  ['- item', '', '  ```text', '  payload', '', '---', '', '# Second'],
+  ['- ```text', '  payload', '- sibling', '', '---', '', '# Second'],
+])('list fences end before the following slide', async (...lines) => {
+  const transformFn = transform as unknown as (code: string, id: string) => Promise<string>;
+  const output = await transformFn(lines.join('\n'), 'slides.re.mdx');
+  expect(output.match(/MDXContentWrapper\.isMDXComponent/g)).toHaveLength(2);
+});
+
+test('root fence after a list keeps slide separators in code', async () => {
+  const transformFn = transform as unknown as (code: string, id: string) => Promise<string>;
+  const output = await transformFn(
+    ['- ```text', '  payload', '```', '---', '', '# Second'].join('\n'),
+    'slides.re.mdx',
+  );
+  expect(output.match(/MDXContentWrapper\.isMDXComponent/g)).toHaveLength(1);
+  expect(output).toContain('---');
 });

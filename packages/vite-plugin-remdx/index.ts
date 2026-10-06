@@ -44,11 +44,6 @@ const shikiTransformerCodeTitle = (): ShikiTransformer => ({
   },
 });
 
-const isClosingFence = (line: string, fence: string) => {
-  const match = line.match(/^[ \t]*(`{3,}|~{3,})[ \t]*\r?$/);
-  return match && match[1][0] === fence[0] && match[1].length >= fence.length;
-};
-
 const addTagsToTypescript = (language: string) =>
   language === 'ts' || language === 'typescript' ? 'ts-tags' : language;
 
@@ -182,21 +177,10 @@ export default function remdx(): Plugin {
             }
           }
         }
-      } else if (line.trimStart().startsWith('{')) {
-        const comment = lines
-          .slice(i)
-          .join('\n')
-          .match(/^\s*\{\s*\/\*[\s\S]*?\*\//);
-        if (comment) {
-          i += comment[0].split('\n').length - 1;
-        }
-      } else {
-        const fence = line.match(/^[ \t]*(?:(?:[-+*]|\d{1,9}[.)])\s+)?(`{3,}|~{3,})(.*)$/);
-        if (fence && !(fence[1][0] === '`' && fence[2].includes('`'))) {
-          for (i += 1; i < lines.length; i++) {
-            if (isClosingFence(lines[i], fence[1])) {
-              break;
-            }
+      } else if (line.startsWith('```')) {
+        for (i += 1; i < lines.length; i++) {
+          if (lines[i].startsWith('```')) {
+            break;
           }
         }
       }
