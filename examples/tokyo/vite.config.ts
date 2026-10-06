@@ -13,7 +13,7 @@ export default defineConfig({
     ignorePatterns: ['dist/', 'index.html', 'pnpm-lock.yaml'],
     singleQuote: true,
   },
-  plugins: [remdx(), react()],
+  plugins: [remdx(), react({ compiler: true })],
   staged: {
     '*': 'vp check --fix',
   },

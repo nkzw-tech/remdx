@@ -16,7 +16,8 @@
     "@nkzw/vite-plugin-remdx": "*",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
-    "@vitejs/plugin-react": "^6.0.1",
+    "@vitejs/plugin-react": "^6.1.2",
+    "oxc-transform-react": "^0.152.0",
     "vite": "npm:@voidzero-dev/vite-plus-core@latest",
     "vite-plus": "latest"
   }

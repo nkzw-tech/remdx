@@ -23,6 +23,7 @@ See the [Example Deck](examples/tokyo) to get started with adding ReMDX to your 
 
 ```bash
 vp add @nkzw/remdx @nkzw/vite-plugin-remdx
+vp add -D @vitejs/plugin-react oxc-transform-react
 ```
 
 `vite.config.ts`:
@@ -33,7 +34,7 @@ import remdx from '@nkzw/vite-plugin-remdx';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  plugins: [remdx(), react()],
+  plugins: [remdx(), react({ compiler: true })],
 });
 ```
 

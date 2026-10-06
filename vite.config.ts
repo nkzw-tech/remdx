@@ -1,4 +1,5 @@
 import nkzw from '@nkzw/oxlint-config';
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite-plus';
 
 export default defineConfig({
@@ -37,6 +38,7 @@ export default defineConfig({
     ],
     options: { typeAware: true, typeCheck: true },
   },
+  plugins: [react({ compiler: true })],
   run: {
     tasks: {
       'test:all': {
