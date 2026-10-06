@@ -76,15 +76,24 @@ export function mapStateToLocation(state: SlideState, basePath = '') {
 type LocationStateOptions = {
   historyFactory?: typeof createBrowserHistory;
   setState(state: DeckView): void;
+  slideCount?: number;
 };
 
 export default function useLocationSync({
   historyFactory = createBrowserHistory,
   setState,
+  slideCount = Infinity,
 }: LocationStateOptions) {
   const [history] = useState(() => (typeof document !== 'undefined' ? historyFactory() : null));
   const [basePath] = useState(() => getBasePath(history?.location.pathname ?? '/'));
   const [initialized, setInitialized] = useState(false);
+  const normalizeState = useCallback(
+    (state: DeckView): DeckView => ({
+      ...state,
+      slideIndex: Math.min(state.slideIndex, Math.max(0, slideCount - 1)),
+    }),
+    [slideCount],
+  );
 
   useEffect(() => {
     return initialized
@@ -92,7 +101,7 @@ export default function useLocationSync({
           if (action !== 'POP') {
             return;
           }
-          const state = mapLocationToState(location);
+          const state = normalizeState(mapLocationToState(location));
           const canonical = mapStateToLocation(state, basePath);
           if (location.pathname !== canonical.pathname || location.search !== canonical.search) {
             history.replace(canonical);
@@ -100,7 +109,7 @@ export default function useLocationSync({
           setState(state);
         })
       : undefined;
-  }, [basePath, initialized, history, setState]);
+  }, [basePath, initialized, history, normalizeState, setState]);
 
   return [
     useCallback(
@@ -110,15 +119,15 @@ export default function useLocationSync({
         }
 
         const { location } = history;
-        const initialState: DeckView = {
+        const initialState = normalizeState({
           ...defaultState,
           ...mapLocationToState(location),
-        };
+        });
         history.replace(mapStateToLocation(initialState, basePath));
         setInitialized(true);
         return initialState;
       },
-      [basePath, history],
+      [basePath, history, normalizeState],
     ),
     useCallback(
       (state: SlideState) => {

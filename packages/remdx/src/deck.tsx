@@ -98,6 +98,7 @@ export default function Deck({
 
   const [syncLocation, onActiveStateChange] = useLocationSync({
     setState: skipTo,
+    slideCount: slides.length,
   });
 
   useEffect(() => {
