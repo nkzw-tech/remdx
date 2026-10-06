@@ -263,3 +263,15 @@ test('root fence after a list keeps slide separators in code', async () => {
   expect(output.match(/MDXContentWrapper\.isMDXComponent/g)).toHaveLength(1);
   expect(output).toContain('---');
 });
+
+test('ANSI highlighting survives failed language loads on plugin reuse', async () => {
+  const transformFn = remdx().transform as unknown as (code: string, id: string) => Promise<string>;
+  const fence = '```';
+  const ansi = [`${fence}ansi`, '\u001b[31mred text\u001b[0m', fence].join('\n');
+  const initial = await transformFn(ansi, 'slides.re.mdx');
+  expect(initial).toContain('color: "#cd3131"');
+
+  await transformFn([`${fence}constructor`, 'literal text', fence].join('\n'), 'slides.re.mdx');
+
+  expect(await transformFn(ansi, 'slides.re.mdx')).toBe(initial);
+});

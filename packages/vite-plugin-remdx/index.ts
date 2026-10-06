@@ -6,7 +6,12 @@ import { transformerMetaHighlight } from '@shikijs/transformers';
 import matter from 'gray-matter';
 import normalizeNewline from 'normalize-newline';
 import rehypeRaw from 'rehype-raw';
-import { createHighlighter, type ShikiTransformer, type ThemeRegistrationResolved } from 'shiki';
+import {
+  createHighlighter,
+  isSpecialLang,
+  type ShikiTransformer,
+  type ThemeRegistrationResolved,
+} from 'shiki';
 import type { Plugin } from 'vite';
 
 type Slide = [string, Record<string, unknown>];
@@ -62,7 +67,8 @@ const visitCodeNodes = async (
   if (node.type === 'code' && node.lang) {
     node.lang = addTagsToTypescript(node.lang.toLowerCase());
     try {
-      if (!highlighter.getLoadedLanguages().includes(node.lang)) {
+      // ANSI and plaintext do not appear in getLoadedLanguages()
+      if (!isSpecialLang(node.lang) && !highlighter.getLoadedLanguages().includes(node.lang)) {
         await highlighter.loadLanguage(node.lang as never);
       }
     } catch {
