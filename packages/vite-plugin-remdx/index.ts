@@ -12,7 +12,6 @@ import type { Plugin } from 'vite';
 
 type Slide = [string, Record<string, unknown>];
 
-const EXPORT_DEFAULT_REGEXP = /export\sdefault\s/g;
 const MODULE_HEADER_REGEXP = /^(?:import|export)\s/;
 const CODE_FENCE_HEADER_REGEXP = /^```([^\s`{]+)([^\n]*)$/gm;
 
@@ -104,6 +103,16 @@ const removeModuleDeclarations = () => (tree: JavaScriptProgram) => {
   );
 };
 
+const removeDefaultExport = () => (tree: JavaScriptProgram) => {
+  tree.body = tree.body.map((node): JavaScriptProgram['body'][number] =>
+    node.type === 'ExportDefaultDeclaration' &&
+    node.declaration.type === 'FunctionDeclaration' &&
+    node.declaration.id !== null
+      ? { ...node.declaration, id: node.declaration.id }
+      : node,
+  );
+};
+
 const compileMDX = async (content: string, options: CompileOptions, development = true) =>
   String(
     (
@@ -132,7 +141,7 @@ export default function remdx(): Plugin {
 
   const wrapComponent = (content: string, data: Record<string, unknown>) => `(() => {
     function MDXContentWrapper(props) {
-      ${content.replaceAll(EXPORT_DEFAULT_REGEXP, '').trim()}
+      ${content.trim()}
       return ${isProduction ? '_jsx' : '_jsxDEV'}(MDXContent, props);
     };
     MDXContentWrapper.isMDXComponent = true;
@@ -316,7 +325,7 @@ export default function remdx(): Plugin {
         const highlighter = await getHighlighter();
 
         return await transform(normalizedCode, {
-          recmaPlugins: [removeModuleDeclarations],
+          recmaPlugins: [removeModuleDeclarations, removeDefaultExport],
           rehypePlugins: [
             [rehypeRaw, { passThrough: nodeTypes }],
             [

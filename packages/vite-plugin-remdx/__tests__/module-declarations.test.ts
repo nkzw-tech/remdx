@@ -57,3 +57,14 @@ test('exported functions containing JSX compile to JavaScript before hoisting', 
   expect(output).toContain('const text = "hello";');
   expect(output).not.toContain('<b>');
 });
+
+test.each([
+  '# Slide\n\nUse `export default hello` here.\n',
+  '# Slide\n\nThe phrase export default hello is ordinary text.\n',
+  '# Slide\n\n```\nexport default hello\n```\n',
+])('default export words in slide content are preserved: %s', async (source) => {
+  const output = await compile(source);
+  expect(output).toContain('export default hello');
+  expect(output.match(/export default \[/g)).toHaveLength(1);
+  expect(output).not.toContain('export default function MDXContent');
+});
