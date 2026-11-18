@@ -1,4 +1,4 @@
-import nkzw from '@nkzw/oxlint-config';
+import nkzw from '@nkzw/oxlint-config/with-sorting';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite-plus';
 
@@ -28,6 +28,7 @@ export default defineConfig({
   lint: {
     extends: [nkzw],
     ignorePatterns: [
+      'examples/tokyo/dist/**',
       'packages/create-remdx/template/**',
       'packages/create-remdx/index.mjs',
       'packages/remdx/index.d.ts',

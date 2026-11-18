@@ -19,7 +19,16 @@ export const defaultTransition: SlideTransition = {
   leave: slideLeave,
 };
 
-export const Transitions: Record<string, SlideTransition> = {
+interface TransitionMap {
+  [name: string]: SlideTransition;
+  default: SlideTransition;
+  leaveOnly: SlideTransition;
+  none: SlideTransition;
+  opacity: SlideTransition;
+  transformRight: SlideTransition;
+}
+
+export const Transitions: TransitionMap = {
   default: defaultTransition,
   leaveOnly: { leave: slideLeave },
   none: {},

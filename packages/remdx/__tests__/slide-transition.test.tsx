@@ -26,7 +26,7 @@ const transition: SlideTransition = {
 };
 
 const playbacks: Array<{ cancel: ReturnType<typeof vi.fn>; finish(): void }> = [];
-const animate = vi.fn<HTMLElement['animate']>(() => {
+const animate = vi.fn((..._args: Parameters<HTMLElement['animate']>) => {
   let finish!: () => void;
   let reject!: (reason: Error) => void;
   const finished = new Promise<void>((resolve, rejectPromise) => {
@@ -39,7 +39,7 @@ const animate = vi.fn<HTMLElement['animate']>(() => {
     finished,
   };
   playbacks.push(playback);
-  return playback as unknown as Animation;
+  return playback;
 });
 
 type Props = {
@@ -57,11 +57,11 @@ function Harness({ direction = 1, initialized = true, isActive, transition = {} 
 let root: Root;
 let container: HTMLDivElement;
 let reducedMotion: boolean;
-let media: EventTarget;
+let media: MediaQueryList;
 const originalAnimate = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'animate');
 
 async function render(props: Props) {
-  await act(() => root.render(<Harness {...props} />));
+  await act(async () => root.render(<Harness {...props} />));
 }
 
 async function finish(index: number) {
@@ -74,9 +74,9 @@ async function finish(index: number) {
 beforeEach(() => {
   vi.stubGlobal('IS_REACT_ACT_ENVIRONMENT', true);
   reducedMotion = false;
-  media = new EventTarget();
+  media = window.matchMedia('(prefers-reduced-motion: reduce)');
   Object.defineProperty(media, 'matches', { get: () => reducedMotion });
-  vi.spyOn(window, 'matchMedia').mockReturnValue(media as MediaQueryList);
+  vi.spyOn(window, 'matchMedia').mockReturnValue(media);
   Object.defineProperty(HTMLElement.prototype, 'animate', {
     configurable: true,
     value: animate,
@@ -90,7 +90,7 @@ beforeEach(() => {
 });
 
 afterEach(async () => {
-  await act(() => root.unmount());
+  await act(async () => root.unmount());
   container.remove();
   if (originalAnimate) {
     Object.defineProperty(HTMLElement.prototype, 'animate', originalAnimate);
@@ -170,7 +170,7 @@ test('reduced motion switches immediately', async () => {
 test('enabling reduced motion settles playback already in progress', async () => {
   await render({ isActive: true, transition });
   await render({ isActive: false, transition });
-  await act(() => {
+  await act(async () => {
     reducedMotion = true;
     media.dispatchEvent(new Event('change'));
   });
@@ -212,7 +212,7 @@ function Lifecycle({ label }: { label: string }) {
 }
 
 async function renderSlides(value: Context, override?: SlideTransition) {
-  await act(() => {
+  await act(async () => {
     root.render(
       <DeckContext.Provider value={value}>
         <Slide id={0}>
@@ -268,7 +268,7 @@ test('useSlide reports active, entering, exiting, and settled states', async () 
 test('useSlide settles both phases when reduced motion is enabled during entry', async () => {
   await renderSlides(context(0));
   await renderSlides(context(1));
-  await act(() => {
+  await act(async () => {
     reducedMotion = true;
     media.dispatchEvent(new Event('change'));
   });

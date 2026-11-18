@@ -182,8 +182,8 @@ const emptyDir = (dir: string) => {
 };
 
 try {
-  // eslint-disable-next-line unicorn/prefer-top-level-await
-  create();
+  await create();
 } catch (error) {
-  console.log(error);
+  console.error(error);
+  process.exitCode = 1;
 }

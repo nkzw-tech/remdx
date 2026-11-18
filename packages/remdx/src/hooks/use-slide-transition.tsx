@@ -35,7 +35,6 @@ export default function useSlideTransition(
       window.matchMedia('(prefers-reduced-motion: reduce)').matches
     ) {
       // Visibility must settle before the browser paints the new slide.
-      // oxlint-disable-next-line react-hooks-js/set-state-in-effect
       setPhaseState('idle');
       return;
     }
@@ -53,7 +52,6 @@ export default function useSlideTransition(
     }
 
     // Retain the outgoing DOM for playback before the next paint.
-    // oxlint-disable-next-line react-hooks-js/set-state-in-effect
     setPhaseState(isActive ? 'entering' : 'exiting');
     const current = element.animate(Array.from(keyframes), {
       duration: 500,

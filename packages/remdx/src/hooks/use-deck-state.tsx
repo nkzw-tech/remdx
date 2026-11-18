@@ -1,10 +1,10 @@
 import { useMemo, useReducer } from 'react';
 
-export const GOTO_FINAL_STEP = null as unknown as number;
+export const GOTO_FINAL_STEP = null;
 
 export type DeckView = {
   slideIndex: number;
-  stepIndex: number;
+  stepIndex: number | typeof GOTO_FINAL_STEP;
 };
 export type DeckState = {
   activeView: DeckView;
@@ -33,7 +33,7 @@ type ReducerActions =
   | { payload?: undefined; type: 'STEP_BACKWARD' }
   | { payload?: undefined; type: 'ADVANCE_SLIDE' }
   | { payload?: Pick<DeckView, 'stepIndex'>; type: 'REGRESS_SLIDE' }
-  | { payload?: DeckView; type: 'COMMIT_TRANSITION' }
+  | { payload?: Partial<DeckView>; type: 'COMMIT_TRANSITION' }
   | { payload?: undefined; type: 'CANCEL_TRANSITION' };
 
 export function deckReducer(state: DeckState, { payload = {}, type }: ReducerActions) {
@@ -50,7 +50,7 @@ export function deckReducer(state: DeckState, { payload = {}, type }: ReducerAct
       const slideDifference = pendingView.slideIndex - state.activeView.slideIndex;
       const stepDifference =
         typeof pendingView.stepIndex === 'number'
-          ? pendingView.stepIndex - state.activeView.stepIndex
+          ? pendingView.stepIndex - (state.activeView.stepIndex ?? 0)
           : 0;
       return {
         ...state,
@@ -64,7 +64,7 @@ export function deckReducer(state: DeckState, { payload = {}, type }: ReducerAct
         navigationDirection: 1,
         pendingView: {
           ...state.pendingView,
-          stepIndex: state.pendingView.stepIndex + 1,
+          stepIndex: (state.pendingView.stepIndex ?? 0) + 1,
         },
       };
     case 'STEP_BACKWARD':
@@ -73,7 +73,7 @@ export function deckReducer(state: DeckState, { payload = {}, type }: ReducerAct
         navigationDirection: -1,
         pendingView: {
           ...state.pendingView,
-          stepIndex: state.pendingView.stepIndex - 1,
+          stepIndex: (state.pendingView.stepIndex ?? 0) - 1,
         },
       };
     case 'ADVANCE_SLIDE':
@@ -129,7 +129,8 @@ export default function useDeckState() {
       () => ({
         advanceSlide: () => dispatch({ type: 'ADVANCE_SLIDE' }),
         cancelTransition: () => dispatch({ type: 'CANCEL_TRANSITION' }),
-        commitTransition: (payload?: DeckView) => dispatch({ payload, type: 'COMMIT_TRANSITION' }),
+        commitTransition: (payload?: Partial<DeckView>) =>
+          dispatch({ payload, type: 'COMMIT_TRANSITION' }),
         initializeTo: (payload: Partial<DeckView>) => dispatch({ payload, type: 'INITIALIZE_TO' }),
         regressSlide: (payload?: Pick<DeckView, 'stepIndex'>) =>
           dispatch({ payload, type: 'REGRESS_SLIDE' }),

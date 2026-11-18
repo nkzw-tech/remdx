@@ -1,5 +1,5 @@
-import { MDXComponents } from '../../types.tsx';
+import type { MDXComponents } from '../../types.tsx';
 import Image from './Image.tsx';
 
-const Components: MDXComponents = { img: Image };
+const Components = { img: Image } satisfies MDXComponents;
 export default Components;

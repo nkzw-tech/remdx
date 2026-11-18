@@ -6,8 +6,8 @@ onlyBuiltDependencies:
   - esbuild
   - unrs-resolver
 catalog:
-  vite: npm:@voidzero-dev/vite-plus-core@1.0.0
-  vite-plus: 1.0.0
+  vite: npm:@voidzero-dev/vite-plus-core@8.3.8000
+  vite-plus: 1.7.0
 overrides:
   vite@*: 'catalog:'
 peerDependencyRules:
@@ -17,3 +17,5 @@ peerDependencyRules:
     react: '*'
     react-dom: '*'
     vite: '*'
+minimumReleaseAgeExclude:
+  - '@nkzw/oxlint-config@3.0.0'

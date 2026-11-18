@@ -30,18 +30,19 @@ beforeEach(() => {
 });
 
 afterEach(async () => {
-  await act(() => root.unmount());
+  await act(async () => root.unmount());
   container.remove();
   vi.restoreAllMocks();
   vi.unstubAllGlobals();
 });
 
 test('a hidden deck waits for a measurable size and fits when it becomes visible', async () => {
-  vi.spyOn(HTMLElement.prototype, 'getClientRects').mockReturnValue([] as unknown as DOMRectList);
-  await act(() => root.render(<Layout />));
+  const rects = document.createElement('div').getClientRects();
+  vi.spyOn(HTMLElement.prototype, 'getClientRects').mockReturnValue(rects);
+  await act(async () => root.render(<Layout />));
   expect(container.querySelector('output')).not.toBeNull();
   const onResize = vi.mocked(useResizeObserver).mock.calls.at(-1)![0]!.onResize!;
-  await act(() =>
+  await act(async () =>
     onResize({
       entry: {
         borderBoxSize: [],
@@ -65,10 +66,11 @@ test.each([
   [1366, 768.375, 'translate(0px, 0px) scale(1)'],
   [683, 900, 'translate(0px, 257.90625px) scale(0.5)'],
 ])('centers a deck in a %s × %s viewport', async (width, height, transform) => {
-  vi.spyOn(HTMLElement.prototype, 'getClientRects').mockReturnValue([
-    new DOMRect(0, 0, width, height),
-  ] as unknown as DOMRectList);
-  await act(() => root.render(<Layout />));
+  const rect = new DOMRect(0, 0, width, height);
+  vi.spyOn(HTMLElement.prototype, 'getClientRects').mockReturnValue(
+    Object.assign([rect], { item: (index: number) => (index === 0 ? rect : null) }),
+  );
+  await act(async () => root.render(<Layout />));
   const style = JSON.parse(container.querySelector('output')!.textContent!);
   expect(style.transform).toBe(transform);
   expect(style.transformOrigin).toBe('0 0');

@@ -63,9 +63,9 @@ export default function Slide({
       return;
     }
 
-    if (pendingView.stepIndex < 0) {
+    if ((pendingView.stepIndex ?? 0) < 0) {
       regressSlide();
-    } else if (pendingView.stepIndex > 0) {
+    } else if ((pendingView.stepIndex ?? 0) > 0) {
       advanceSlide();
     } else if (pendingView.stepIndex === GOTO_FINAL_STEP) {
       commitTransition({

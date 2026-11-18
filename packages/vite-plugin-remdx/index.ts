@@ -15,7 +15,7 @@ import {
 } from 'shiki';
 import type { Plugin } from 'vite';
 
-type Slide = [string, Record<string, unknown>];
+type Slide = [content: string, frontmatter: unknown];
 
 const MODULE_HEADER_REGEXP = /^(?:import|export)\s/;
 
@@ -54,7 +54,7 @@ const addTagsToTypescript = (language: string) =>
 
 type MarkdownTreeNode = {
   children?: Array<unknown>;
-  data?: Record<string, unknown>;
+  data?: { hProperties?: { metastring?: string }; meta?: string };
   lang?: string;
   meta?: string;
   type: string;
@@ -79,9 +79,8 @@ const visitCodeNodes = async (
   if (node.type === 'code' && node.meta) {
     node.data ??= {};
     node.data.meta = node.meta;
-    const hProperties = (node.data.hProperties as Record<string, unknown> | undefined) ?? {};
-    hProperties['metastring'] = node.meta;
-    node.data.hProperties = hProperties;
+    node.data.hProperties ??= {};
+    node.data.hProperties.metastring = node.meta;
   }
 
   for (const child of node.children || []) {
@@ -141,11 +140,11 @@ const parseSlide = (text: string): Slide => {
   return [content, data];
 };
 
-export default function remdx(): Plugin {
+export default function remdx() {
   let highlighterPromise: Promise<Awaited<ReturnType<typeof createHighlighter>>>;
   const isProduction = process.env.NODE_ENV === 'production';
 
-  const wrapComponent = (content: string, data: Record<string, unknown>) => `(() => {
+  const wrapComponent = (content: string, data: Slide[1]) => `(() => {
     function MDXContentWrapper(props) {
       ${content.trim()}
       return ${isProduction ? '_jsx' : '_jsxDEV'}(MDXContent, props);
@@ -309,5 +308,5 @@ export default function remdx(): Plugin {
         });
       }
     },
-  };
+  } satisfies Plugin;
 }

@@ -33,21 +33,17 @@ function Content({ title }: { title: string }) {
 
 beforeEach(() => {
   vi.stubGlobal('IS_REACT_ACT_ENVIRONMENT', true);
-  vi.spyOn(HTMLElement.prototype, 'getClientRects').mockReturnValue([
-    new DOMRect(0, 0, 1280, 720),
-  ] as unknown as DOMRectList);
-  vi.spyOn(window, 'matchMedia').mockReturnValue({
-    addEventListener() {},
-    matches: false,
-    removeEventListener() {},
-  } as unknown as MediaQueryList);
+  const rect = new DOMRect(0, 0, 1280, 720);
+  vi.spyOn(HTMLElement.prototype, 'getClientRects').mockReturnValue(
+    Object.assign([rect], { item: (index: number) => (index === 0 ? rect : null) }),
+  );
   container = document.createElement('div');
   document.body.append(container);
   root = createRoot(container);
 });
 
 afterEach(async () => {
-  await act(() => root.unmount());
+  await act(async () => root.unmount());
   container.remove();
   window.history.replaceState(null, '', '/');
   vi.restoreAllMocks();
@@ -56,7 +52,7 @@ afterEach(async () => {
 
 async function mount(path: string) {
   window.history.replaceState(null, '', path);
-  await act(() =>
+  await act(async () =>
     root.render(
       <Deck
         slides={['First', 'Second', 'Third'].map((title, id) => (
@@ -75,7 +71,9 @@ function activeSlide() {
 }
 
 async function navigate(action: 'back' | 'next') {
-  await act(() => activeSlide().querySelector<HTMLButtonElement>(`[data-${action}]`)!.click());
+  await act(async () =>
+    activeSlide().querySelector<HTMLButtonElement>(`[data-${action}]`)!.click(),
+  );
 }
 
 test.each(['/slide-999', '/?slideIndex=998'])(
@@ -94,7 +92,7 @@ test.each(['/slide-999', '/?slideIndex=998'])(
 
 test('out-of-range links reached through history also select a valid slide', async () => {
   await mount('/slide-1');
-  await act(() => {
+  await act(async () => {
     window.history.replaceState(window.history.state, '', '/slide-999');
     window.dispatchEvent(new PopStateEvent('popstate'));
   });
@@ -122,7 +120,7 @@ test.each(['/slide-2/step-2', '/slide-2/step-final', '/?slideIndex=1&stepIndex=2
 
 test('step links reached through history normalize before forward navigation', async () => {
   await mount('/slide-1');
-  await act(() => {
+  await act(async () => {
     window.history.replaceState(window.history.state, '', '/slide-2/step-2');
     window.dispatchEvent(new PopStateEvent('popstate'));
   });
@@ -144,7 +142,7 @@ test.each([
 ])('%s (shift: %s) navigates to %s', async (key, shiftKey, path, direction) => {
   await mount('/slide-2');
   const event = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, key, shiftKey });
-  await act(() => document.body.dispatchEvent(event));
+  await act(async () => document.body.dispatchEvent(event));
   expect(window.location.pathname).toBe(path);
   expect(controls.direction).toBe(direction);
   expect(event.defaultPrevented).toBe(true);
@@ -171,7 +169,7 @@ test.each([
   activeSlide().append(element);
   for (const key of [' ', 'ArrowLeft', 'PageDown', 'Home', 'End']) {
     const event = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, key });
-    await act(() => child.dispatchEvent(event));
+    await act(async () => child.dispatchEvent(event));
     expect(window.location.pathname).toBe('/slide-2');
     expect(event.defaultPrevented).toBe(false);
   }
@@ -191,7 +189,7 @@ test.each([
     key: 'ArrowRight',
     ...options,
   });
-  await act(() => document.body.dispatchEvent(event));
+  await act(async () => document.body.dispatchEvent(event));
   expect(window.location.pathname).toBe('/slide-2');
   expect(event.defaultPrevented).toBe(false);
 });
@@ -201,7 +199,7 @@ test('presentation controls honor events handled by slide content', async () => 
   const element = document.createElement('div');
   element.addEventListener('keydown', (event) => event.preventDefault());
   activeSlide().append(element);
-  await act(() =>
+  await act(async () =>
     element.dispatchEvent(
       new KeyboardEvent('keydown', { bubbles: true, cancelable: true, key: ' ' }),
     ),
@@ -223,7 +221,7 @@ test('presentation controls preserve keyboard events inside an interactive shado
     composed: true,
     key: ' ',
   });
-  await act(() => child.dispatchEvent(event));
+  await act(async () => child.dispatchEvent(event));
   expect(window.location.pathname).toBe('/slide-2');
   expect(event.defaultPrevented).toBe(false);
 });
@@ -231,18 +229,18 @@ test('presentation controls preserve keyboard events inside an interactive shado
 test('useDeck jumps use zero-based indices, clamp bounds, and preserve the URL prefix', async () => {
   await mount('/talk/slide-1');
   expect(controls).toMatchObject({ direction: 0, slideCount: 3, slideIndex: 0 });
-  await act(() => controls.goToSlide(2));
+  await act(async () => controls.goToSlide(2));
   expect(activeSlide().querySelector('p')?.textContent).toBe('Third');
   expect(window.location.pathname).toBe('/talk/slide-3');
   expect(controls).toMatchObject({ direction: 1, slideIndex: 2 });
-  await act(() => controls.goToSlide(-100));
+  await act(async () => controls.goToSlide(-100));
   expect(window.location.pathname).toBe('/talk/slide-1');
   expect(controls).toMatchObject({ direction: -1, slideIndex: 0 });
-  await act(() => controls.goToSlide(999));
+  await act(async () => controls.goToSlide(999));
   expect(window.location.pathname).toBe('/talk/slide-3');
-  await act(() => controls.previousSlide());
+  await act(async () => controls.previousSlide());
   expect(window.location.pathname).toBe('/talk/slide-2');
-  await act(() => controls.nextSlide());
+  await act(async () => controls.nextSlide());
   expect(window.location.pathname).toBe('/talk/slide-3');
 });
 
@@ -265,7 +263,7 @@ test('useDeck reports a useful error outside a deck', () => {
 
 test('controls stop listening when the deck unmounts', async () => {
   await mount('/slide-2');
-  await act(() => root.render(null));
+  await act(async () => root.render(null));
   const event = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, key: ' ' });
   document.body.dispatchEvent(event);
   expect(event.defaultPrevented).toBe(false);

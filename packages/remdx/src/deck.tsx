@@ -2,16 +2,13 @@ import { createContext, CSSProperties, ReactNode, useCallback, useEffect, useMem
 import { SwipeEventData } from 'react-swipeable';
 import { SlideTransition } from '../types.tsx';
 import useAspectRatioFitting from './hooks/use-aspect-ratio-fitting.tsx';
-import useDeckState from './hooks/use-deck-state.tsx';
+import useDeckState, { type DeckView } from './hooks/use-deck-state.tsx';
 import useLocationSync from './hooks/use-location-sync.tsx';
 import usePresentationControls from './hooks/use-presentation-controls.tsx';
 import { defaultTransition } from './transitions.tsx';
 
 type DeckContextType = {
-  activeView: {
-    slideIndex: number;
-    stepIndex: number;
-  };
+  activeView: DeckView;
   advanceSlide(): void;
   cancelTransition(): void;
   commitTransition(newView?: { stepIndex: number }): void;
@@ -19,10 +16,7 @@ type DeckContextType = {
   initialized: boolean;
   navigationDirection: number;
   onSwiped(eventData: SwipeEventData): void;
-  pendingView: {
-    slideIndex: number;
-    stepIndex: number;
-  };
+  pendingView: DeckView;
   regressSlide(): void;
   slideCount: number;
   stepBackward(): void;

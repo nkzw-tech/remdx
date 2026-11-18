@@ -1,4 +1,5 @@
 export default function Image({
+  alt = '',
   src: source,
   ...props
 }: React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) {
@@ -8,6 +9,7 @@ export default function Image({
   const [src, query] = source.split('?');
   return (
     <img
+      alt={alt}
       loading="eager"
       src={src}
       style={Object.fromEntries(new URLSearchParams(query))}

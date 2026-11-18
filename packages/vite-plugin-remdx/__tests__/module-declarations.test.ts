@@ -3,8 +3,9 @@ import { expect, test } from 'vite-plus/test';
 import remdx from '../index.ts';
 
 async function compile(source: string) {
-  const transform = remdx().transform as unknown as (code: string, id: string) => Promise<string>;
+  const transform = remdx().transform;
   const output = await transform(source, 'slides.re.mdx');
+  expect.assert(output !== undefined);
   await transformWithOxc(output, 'slides.js');
   return output;
 }

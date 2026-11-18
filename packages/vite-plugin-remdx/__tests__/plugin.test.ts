@@ -4,10 +4,8 @@ import remdx from '../index.ts';
 const { transform } = remdx();
 
 test('remdx compiler', async () => {
-  const transformFn = transform as unknown as (code: string, id: string) => Promise<string>;
-
   expect(
-    await transformFn(
+    await transform(
       `
 import data from './data.tsx';
 export { Components } from './Components.tsx';
@@ -112,10 +110,10 @@ theme: dark
 });
 
 test('shiki metadata is preserved for titles and highlighted lines', async () => {
-  const transformFn = remdx().transform as unknown as (code: string, id: string) => Promise<string>;
+  const { transform } = remdx();
 
   const fence = '```';
-  const output = await transformFn(
+  const output = await transform(
     [
       '# Slide',
       '',
@@ -141,16 +139,13 @@ test.each(
 )(
   'indented %s fences are highlighted without changing code indentation or metadata',
   async (language, indentation) => {
-    const transformFn = remdx().transform as unknown as (
-      code: string,
-      id: string,
-    ) => Promise<string>;
+    const { transform } = remdx();
     const fence = '```';
     const code =
       language === 'ts' || language === 'typescript'
         ? ['const enabled: boolean = true;', 'const query = sql`SELECT ${1} AS id`;']
         : ['{', '  "enabled": true', '}'];
-    const output = await transformFn(
+    const output = await transform(
       [
         '<div>',
         `${indentation}${fence}${language} title="demo" {2}`,
@@ -168,6 +163,7 @@ test.each(
     expect(output).toContain('className: "shiki shiki-themes Licht Dunkel"');
     expect(output).toContain('"data-title": "demo"');
     expect(output).toContain('className: "line highlighted"');
+    expect.assert(output !== undefined);
     expect(output.match(/MDXContentWrapper\.isMDXComponent/g)).toHaveLength(2);
     expect(output).not.toContain('children: "    ');
     if (language === 'json') {
@@ -184,12 +180,9 @@ test.each(
 test.each(['````', '~~~'])(
   'fence-shaped content inside %s fences is preserved',
   async (outerFence) => {
-    const transformFn = remdx().transform as unknown as (
-      code: string,
-      id: string,
-    ) => Promise<string>;
+    const { transform } = remdx();
     const fence = '```';
-    const output = await transformFn(
+    const output = await transform(
       [
         `${outerFence}text`,
         `  ${fence}typescript`,
@@ -204,6 +197,7 @@ test.each(['````', '~~~'])(
       'slides.re.mdx',
     );
 
+    expect.assert(output !== undefined);
     expect(output.match(/MDXContentWrapper\.isMDXComponent/g)).toHaveLength(2);
     expect(output).toContain(`${fence}typescript`);
     expect(output).toContain(`${fence}unsupported-language`);
@@ -212,7 +206,7 @@ test.each(['````', '~~~'])(
 );
 
 test('frontmatter scalar is preserved', async () => {
-  const transform = remdx().transform as unknown as (code: string, id: string) => Promise<string>;
+  const { transform } = remdx();
   const output = await transform(
     [
       '# First',
@@ -237,11 +231,9 @@ test.each([
   ['- ```typescript', '  const x = 1;', '  ```'],
   ['1. ```typescript', '   const x = 1;', '   ```'],
 ])('fence-shaped comments and list fences preserve slide separators', async (...lines) => {
-  const transformFn = remdx().transform as unknown as (code: string, id: string) => Promise<string>;
-  const output = await transformFn(
-    [...lines, '', '---', '', '# Second'].join('\n'),
-    'slides.re.mdx',
-  );
+  const { transform } = remdx();
+  const output = await transform([...lines, '', '---', '', '# Second'].join('\n'), 'slides.re.mdx');
+  expect.assert(output !== undefined);
   expect(output.match(/MDXContentWrapper\.isMDXComponent/g)).toHaveLength(2);
 });
 
@@ -250,29 +242,29 @@ test.each([
   ['- item', '', '  ```text', '  payload', '', '---', '', '# Second'],
   ['- ```text', '  payload', '- sibling', '', '---', '', '# Second'],
 ])('list fences end before the following slide', async (...lines) => {
-  const transformFn = transform as unknown as (code: string, id: string) => Promise<string>;
-  const output = await transformFn(lines.join('\n'), 'slides.re.mdx');
+  const output = await transform(lines.join('\n'), 'slides.re.mdx');
+  expect.assert(output !== undefined);
   expect(output.match(/MDXContentWrapper\.isMDXComponent/g)).toHaveLength(2);
 });
 
 test('root fence after a list keeps slide separators in code', async () => {
-  const transformFn = transform as unknown as (code: string, id: string) => Promise<string>;
-  const output = await transformFn(
+  const output = await transform(
     ['- ```text', '  payload', '```', '---', '', '# Second'].join('\n'),
     'slides.re.mdx',
   );
+  expect.assert(output !== undefined);
   expect(output.match(/MDXContentWrapper\.isMDXComponent/g)).toHaveLength(1);
   expect(output).toContain('---');
 });
 
 test('ANSI highlighting survives failed language loads on plugin reuse', async () => {
-  const transformFn = remdx().transform as unknown as (code: string, id: string) => Promise<string>;
+  const { transform } = remdx();
   const fence = '```';
   const ansi = [`${fence}ansi`, '\u001b[31mred text\u001b[0m', fence].join('\n');
-  const initial = await transformFn(ansi, 'slides.re.mdx');
+  const initial = await transform(ansi, 'slides.re.mdx');
   expect(initial).toContain('color: "#cd3131"');
 
-  await transformFn([`${fence}constructor`, 'literal text', fence].join('\n'), 'slides.re.mdx');
+  await transform([`${fence}constructor`, 'literal text', fence].join('\n'), 'slides.re.mdx');
 
-  expect(await transformFn(ansi, 'slides.re.mdx')).toBe(initial);
+  expect(await transform(ansi, 'slides.re.mdx')).toBe(initial);
 });

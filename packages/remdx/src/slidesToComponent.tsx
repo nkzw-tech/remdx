@@ -18,7 +18,7 @@ export default async function slidesToComponent(module: Promise<ReMDXModule>) {
   }
 
   return (
-    <MDXProvider components={{ ...DefaultComponents, ...Components }}>
+    <MDXProvider components={{ ...DefaultComponents, ...(Components as object | undefined) }}>
       <Deck
         slides={slides.map(({ Component, data }, index) => (
           <Slide

@@ -98,14 +98,14 @@ beforeEach(() => {
 });
 
 afterEach(async () => {
-  await act(() => root.unmount());
+  await act(async () => root.unmount());
   container.remove();
   vi.unstubAllGlobals();
 });
 
 async function mount(entries: Array<string>) {
   const history = createMemoryHistory({ initialEntries: entries });
-  await act(() => root.render(<Harness history={history} />));
+  await act(async () => root.render(<Harness history={history} />));
   return history;
 }
 
@@ -130,42 +130,42 @@ test.each([
 
 test('navigation, steps, and browser history stay in sync without duplicate entries', async () => {
   const history = await mount(['/talk/slide-1']);
-  await act(() => updateView({ slideIndex: 2, stepIndex: 0 }));
+  await act(async () => updateView({ slideIndex: 2, stepIndex: 0 }));
   expect(history.location.pathname).toBe('/talk/slide-3');
-  await act(() => updateView({ slideIndex: 2, stepIndex: 2 }));
+  await act(async () => updateView({ slideIndex: 2, stepIndex: 2 }));
   expect(history.location.pathname).toBe('/talk/slide-3/step-2');
   expect(history.index).toBe(2);
-  await act(() => updateView({ slideIndex: 2, stepIndex: 2 }));
+  await act(async () => updateView({ slideIndex: 2, stepIndex: 2 }));
   expect(history.index).toBe(2);
-  await act(() => history.back());
+  await act(async () => history.back());
   expect(view()).toEqual({ slideIndex: 2, stepIndex: 0 });
   expect(history.index).toBe(1);
-  await act(() => history.back());
+  await act(async () => history.back());
   expect(view()).toEqual({ slideIndex: 0, stepIndex: 0 });
   expect(history.index).toBe(0);
-  await act(() => history.forward());
-  await act(() => history.forward());
+  await act(async () => history.forward());
+  await act(async () => history.forward());
   expect(view()).toEqual({ slideIndex: 2, stepIndex: 2 });
   expect(history.index).toBe(2);
 });
 
 test('returning to the deck root resets the slide and step', async () => {
   const history = await mount(['/talk/', '/talk/slide-3/step-2']);
-  await act(() => history.back());
+  await act(async () => history.back());
   expect(view()).toEqual({ slideIndex: 0, stepIndex: 0 });
   expect(history.location.pathname).toBe('/talk/slide-1');
   expect(history.index).toBe(0);
-  await act(() => history.forward());
+  await act(async () => history.forward());
   expect(view()).toEqual({ slideIndex: 2, stepIndex: 2 });
 });
 
 test('old links reached through history are replaced rather than pushed', async () => {
   const history = await mount(['/?slideIndex=1&stepIndex=2', '/slide-5']);
-  await act(() => history.back());
+  await act(async () => history.back());
   expect(view()).toEqual({ slideIndex: 1, stepIndex: 2 });
   expect(history.location.pathname).toBe('/slide-2/step-2');
   expect(history.location.search).toBe('');
   expect(history.index).toBe(0);
-  await act(() => history.forward());
+  await act(async () => history.forward());
   expect(view()).toEqual({ slideIndex: 4, stepIndex: 0 });
 });
